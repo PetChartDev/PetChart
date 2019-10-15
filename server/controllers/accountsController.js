@@ -7,7 +7,7 @@ const SALT_WORK_FACTOR = 10;
 
 accountsController.createAccount = (req, res, next) => {
   console.log('\n*********** accountsController.createAccount ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, role, email } = req.body;
   bcrypt.hash(req.body.password, SALT_WORK_FACTOR)
     .then((hash) => {
 
@@ -42,7 +42,7 @@ accountsController.createAccount = (req, res, next) => {
 
 accountsController.login = (req, res, next) => {
   console.log('\n*********** accountsController.login ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   const profileQuery = {
     name: 'retrieve hash password',
@@ -89,6 +89,7 @@ accountsController.login = (req, res, next) => {
             lastName: profile.rows[0].last_name,
             email: profile.rows[0].email,
           };
+          res.locals.role = role;
           return next();
         });
       } else {

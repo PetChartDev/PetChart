@@ -1,0 +1,51 @@
+CREATE TABLE owners (
+  owner_id        SERIAL PRIMARY KEY,
+  first_name      VARCHAR NOT NULL,
+  last_name       VARCHAR NOT NULL,
+  email           VARCHAR UNIQUE NOT NULL,
+  password        VARCHAR NOT NULL
+);
+
+CREATE TABLE pets (
+  pet_id          SERIAL PRIMARY KEY,
+  name            VARCHAR NOT NULL,
+  type            VARCHAR NOT NULL,
+  gender          VARCHAR NOT NULL,
+  spade           VARCHAR NOT NULL,
+  birth_year      VARCHAR NOT NULL,
+  FOREIGN KEY     (owner_id) REFERENCES owners (owner_id),
+  FOREIGN KEY     (vet_id) REFERENCES vets (vet_id) 
+);
+
+CREATE TABLE vets (
+  vet_id          SERIAL PRIMARY KEY,
+  practice_name   VARCHAR NOT NULL,
+  first_name      VARCHAR NOT NULL,
+  last_name       VARCHAR NOT NULL,
+  email           VARCHAR UNIQUE NOT NULL,
+  password        VARCHAR NOT NULL
+);
+
+CREATE TABLE surgeries (
+  surgery_id          SERIAL PRIMARY KEY,
+  name                VARCHAR NOT NULL,
+  date                VARCHAR NOT NULL,
+  pet_id integer REFERENCES pets (pet_id),
+  visit_id integer REFERENCES visits (visit_id),
+);
+
+CREATE TABLE vaccines (
+  vaccine_id      SERIAL PRIMARY KEY,
+  name            VARCHAR NOT NULL,
+  date            VARCHAR NOT NULL,
+  pet_id integer REFERENCES pets (pet_id),
+  visit_id integer REFERENCES visits (visit_id)
+);
+
+CREATE TABLE visits (
+  visit_id        SERIAL PRIMARY KEY,
+  date            VARCHAR NOT NULL,
+  notes           VARCHAR NOT NULL,
+  pet_id          REFERENCES pets (pet_id),
+  vet_id          REFERENCES vets (vet_id)
+);
