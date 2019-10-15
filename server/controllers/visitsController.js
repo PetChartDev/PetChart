@@ -11,6 +11,10 @@ const db = require('../../database/database');
 visitsController.createVisit = (req, res, next) => {
   console.log('\n*********** visitsController.createVisit ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   // Might add a file key later
+  if(!req.body.visit){
+    const err = {message:"Error: visitsController.createVisit: Undefined visit keys"}
+    return next(err);
+  } 
   const { date, notes, petID, vetID } = req.body.visit;
 
   if (req.body.visit) {
