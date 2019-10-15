@@ -24,8 +24,8 @@ router.post('/login',
   (req, res) => {
     if (res.locals.profileMatch) {
       if (res.locals.passwordMatch) {
-        const { owner, pets } = res.locals;
-        res.status(200).json({ owner, pets });
+        const { owner, pets, role } = res.locals;
+        res.status(200).json({ owner, pets, role });
       } else {
         const { passwordMatch } = res.locals;
         res.status(401).json({ passwordMatch });

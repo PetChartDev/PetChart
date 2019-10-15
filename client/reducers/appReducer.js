@@ -241,7 +241,9 @@ const appReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        appPage: 'dashboard',
+        // @todo: removed the dashboard appPage in state and moved it to Main Container.
+        // expect to get an additional variable in response to the MainContainer fetch request
+        // that will state "vet" or "owner" to conditionally render those pages
         userProfile,
       };
 

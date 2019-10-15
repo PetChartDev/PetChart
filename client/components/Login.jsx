@@ -20,13 +20,16 @@ const Login = (props) => {
       {/* login form: */}
       <form id = "loginForm" onSubmit = { (event) => props.saveProfile(event)} >
         <label> Email: </label>
-        <input type="input" id = "email"></input>
-        <br></br>
-        <label> password: </label>
-        <input type="input" id = "password"></input>
-        <br></br>
-        <input type="submit" value="login"></input>
-        <input type="button" value="Go to signup" onClick = { () => props.publicPage("signup")} ></input>
+        <input type="input" required id = "email"></input>
+        <br />
+        <label> Password: </label>
+        <input type="password" required id = "password"></input>
+        <br />
+        <label><input type="radio" required name="role" value="Owner" />Owner</label>
+        <label><input type="radio" required name="role" value="Vet" />Vet</label>
+        <br />
+        <input type="submit" value="Login"></input>
+        <input type="button" value="Go to Signup" onClick = { () => props.publicPage("signup")} ></input>
       </form>
       
     </div>

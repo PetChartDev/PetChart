@@ -7,6 +7,21 @@ const vetsRouter = require('./routes/vetsRouter');
 const visitsRouter = require('./routes/visitsRouter');
 const surgeryRouter = require('./routes/surgeryRouter');
 const vaccinesRouter = require('./routes/vaccinesRouter');
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+  cb(null, './uploads');
+},
+filename: function (req, file, cb) {
+  cb(null, file.originalname);
+}
+});
+
+
+const upload = multer({ storage: storage });
+
+
 
 const app = express();
 
@@ -17,7 +32,7 @@ const PORT = 3000;
 // });
 
 app.use(bodyParser.json(), (req, res, next) => {
-  console.log('\n*********** BodyParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)}`);
+  // console.log('\n*********** BodyParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)}`);
   // eslint-disable-next-line max-len
   // console.log('\n*********** CookieParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nCOOKIES: ${JSON.stringify(req.cookies)}`);
   return next();
@@ -37,7 +52,13 @@ app.use('/surgeries', surgeryRouter);
 
 app.use('/build', express.static(path.resolve(__dirname, '../build')));
 
+app.post('/uploadImg', upload.single('avatar'), function (req, res, next) {
+  console.log("HEEEELLLLOOOOOO", req.file);
+  // res.status(200).send(req.file);
+})
+
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));
+
 
 /**
  * @name GLOBAL ROUTE HANDLER
