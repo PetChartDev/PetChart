@@ -23,8 +23,8 @@ surgeryController.createSurgery = (req, res, next) => {
         .then((newSurgery) => {
           release();
           // successful query
-          const { surgery_id, name, date } = newSurgery.rows[0];
-          res.locals.newSurgery = { id: surgery_id, name, date };
+          const { surgery_id, name, date, pet_id } = newSurgery.rows[0];
+          res.locals.newSurgery = { id: surgery_id, pet_id, name, date };
           return next();
         })
         .catch((surgeryQueryErr) => {
