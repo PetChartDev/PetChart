@@ -19,6 +19,8 @@ module.exports = {
   plugins: [
     'react',
     'react-redux',
+    'jest',
+
   ],
   rules: {
   },
