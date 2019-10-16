@@ -46,21 +46,27 @@ petsController.addPet = (req, res, next) => {
 
   // NOTES: check with frontend to see the structure of how they send a pet data to server
   // eslint-disable-next-line object-curly-newline
-  const { name, type, gender, spayed, birthYear, ownerID, vetID } = req.body.pet;
+  if(!req.body.pet){
+    const err = {message:"Error: petsController.addPet: Undefined pet keys"}
+    return next(err);
+  } 
+  const { name, type, gender, spayed, birthYear, ownerID, vetID, profilePic } = req.body.pet;
+  
   // const { vetID } = res.locals;
-
+ 
   if (req.body.pet) {
     // if vetID exist then we query normally otherwise we query without the vet_id column added
     const addPet = vetID ? petQuery.addPet : petQuery.addPetWithoutVet;
-    const petData = vetID ? [name, type, gender, spayed, birthYear, ownerID, vetID] : [name, type, gender, spayed, birthYear, ownerID];
+    const petData = vetID ? [name, type, gender, spayed, birthYear, ownerID, vetID, profilePic] : [name, type, gender, spayed, birthYear, ownerID, profilePic];
     db.connect((err, client, release) => {
-      console.log("ERROR: ", err);
+      if(err)console.log("ERROR: ", err);
       client.query(addPet, petData)
         .then((newPet) => {
           release();
+        
           // successful query
-          const { pet_id, name, type, gender, spayed, birth_year, owner_id, vet_id} = newPet.rows[0];
-          res.locals.newPet = { id: pet_id, name, type, gender, spayed, birthYear: birth_year, ownerID: owner_id, vetID: vet_id };
+          const { pet_id, name, type, gender, spayed, birth_year, owner_id, vet_id, profile_pic} = newPet.rows[0];
+          res.locals.newPet = { id: pet_id, name, type, gender, spayed, birthYear: birth_year, ownerID: owner_id, vetID: vet_id, profilePic: profile_pic};
           return next();
         })
         .catch((petQueryErr) => {

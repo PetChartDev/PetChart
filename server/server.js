@@ -32,7 +32,14 @@ const PORT = 3000;
 // });
 
 app.use(bodyParser.json(), (req, res, next) => {
-  // console.log('\n*********** BodyParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)}`);
+  console.log('\n*********** BodyParser JSON ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)}`);
+  // eslint-disable-next-line max-len
+  // console.log('\n*********** CookieParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nCOOKIES: ${JSON.stringify(req.cookies)}`);
+  return next();
+});
+
+app.use(bodyParser.urlencoded(), (req, res, next) => {
+  console.log('\n*********** BodyParser URL ENCODER ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)}`);
   // eslint-disable-next-line max-len
   // console.log('\n*********** CookieParser ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nCOOKIES: ${JSON.stringify(req.cookies)}`);
   return next();
