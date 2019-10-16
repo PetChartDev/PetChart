@@ -7,14 +7,28 @@ const SALT_WORK_FACTOR = 10;
 
 accountsController.createAccount = (req, res, next) => {
   console.log('\n*********** accountsController.createAccount ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
-  const { firstName, lastName, role, email } = req.body;
+  const { firstName, lastName, role, email, practice } = req.body;
   bcrypt.hash(req.body.password, SALT_WORK_FACTOR)
     .then((hash) => {
-
+      // This logic block looks at the role property and determines whether or not client is a Vet or pet Owner.
+      // Changes the target of the query
+      // new account values contains the necessary data schema to add to either vets or owners table. 
+      let queryTargetCommand = null;
+      let newAccountValues = null;
+      if(role === 'Owner'){
+        newAccountValues = [firstName, lastName, email, hash];
+        queryTargetCommand = 'INSERT INTO owners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *'
+      }else if(role === 'Vet') {
+        newAccountValues = [practice,firstName, lastName, email, hash]
+        queryTargetCommand = 'INSERT INTO vets (practice_name,first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+      }else {
+        const err = {message:'Role property must be "Owner" or "Vet".'}
+         return next(err)}
+      /////////////////////////////////////////////////
       const query = {
         name: 'add-user',
-        text: 'INSERT INTO owners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
-        values: [firstName, lastName, email, hash],
+        text: queryTargetCommand,
+        values: newAccountValues,
         rowMode: 'array',
       };
 
@@ -43,10 +57,18 @@ accountsController.createAccount = (req, res, next) => {
 accountsController.login = (req, res, next) => {
   console.log('\n*********** accountsController.login ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   const { email, password, role } = req.body;
+  let queryTargetCommand = null;
+  if(role === 'Owner'){
+    queryTargetCommand = `SELECT * FROM owners WHERE email = '${email}'`;
+  }else if(role === 'Vet') {
+    queryTargetCommand = `SELECT * FROM vets WHERE email = '${email}'`;
+  }else {
+    const err = {message:'Role property must be "Owner" or "Vet".'}
+     return next(err)}
 
   const profileQuery = {
     name: 'retrieve hash password',
-    text: `SELECT * FROM owners WHERE email = '${email}'`,
+    text: queryTargetCommand,
   };
 
   // console.log('this is the hash query obj: ', hashQuery);

@@ -14,13 +14,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { type } from 'os';
+import { isNullOrUndefined } from 'util';
 import Login from '../components/Login.jsx';
 import Signup from '../components/Signup.jsx';
 import Dashboard from './Dashboard.jsx';
 import VetDashboard from './VetDashboard.jsx';
 import * as actions from '../actions/actions';
 import emptyPet from '../constants/emptyPetObj';
-import { isNullOrUndefined } from 'util';
 
 const mapStateToProps = (state) => ({
   appPage: state.app.appPage,
@@ -49,7 +49,7 @@ class MainContainer extends Component {
     console.log('verify user');
     event.preventDefault();
     const form = document.getElementById('loginForm');
-    const role = document.querySelector('input[name="role"]:checked').value
+    const role = document.querySelector('input[name="role"]:checked').value;
     const email = form[0].value;
     const password = form[1].value;
     const credentials = { email, password, role };
@@ -91,11 +91,11 @@ class MainContainer extends Component {
     //  (2) redirect the user back to the login page to login
     event.preventDefault();
     const form = document.getElementById('signupForm');
-    const roleSwitch = document.querySelector('input[name="role"]:checked').value
+    const roleSwitch = document.querySelector('input[name="role"]:checked').value;
 
-    let createUser
+    let createUser;
 
-    if (roleSwitch === 'Vet') { 
+    if (roleSwitch === 'Vet') {
       const firstName = form[2].value;
       const lastName = form[3].value;
       const practice = form[4].value;
@@ -104,8 +104,7 @@ class MainContainer extends Component {
       createUser = {
         firstName, lastName, practice, email, password,
       };
-    }
-    else {
+    } else {
       const firstName = form[2].value;
       const lastName = form[3].value;
       const email = form[4].value;
@@ -117,7 +116,7 @@ class MainContainer extends Component {
 
     const method = 'POST';
 
-    console.log(createUser)
+    console.log(createUser);
 
     fetch('accounts/register', {
       method,
