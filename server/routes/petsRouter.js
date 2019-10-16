@@ -22,4 +22,14 @@ router.post('/', petsController.addPet, (req, res) => {
   res.json(newPet);
 });
 
+/**
+ * @endpoint : '/pets/'
+ * @method : PATCH
+ * @returns -> a single pet object via JSON
+ */
+router.patch('/', petsController.updatePet, (req, res) => {
+  const { updatedPet } = res.locals;
+  res.json(updatedPet);
+});
+
 module.exports = router;
