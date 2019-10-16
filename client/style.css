@@ -44,7 +44,14 @@ body {
   background-color: #61f2f5;
 }
 
+.nav-container{
+  display: flex;
+}
+
 .nav-bar {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
   background-color: #e0e0e0;
 }
 
