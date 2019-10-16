@@ -13,8 +13,9 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
   cb(null, './uploads');
 },
-filename: function (req, file, cb) {
-  cb(null, file.originalname);
+  filename: function (req, file, cb) {
+  console.log("this is inside upload", req.params)
+  cb(null, "pet" + req.params.petId + '.png');
 }
 });
 
@@ -59,10 +60,11 @@ app.use('/surgeries', surgeryRouter);
 
 app.use('/build', express.static(path.resolve(__dirname, '../build')));
 
-app.post('/uploadImg', upload.single('avatar'), function (req, res, next) {
-  console.log("HEEEELLLLOOOOOO", req.file);
-  // res.status(200).send(req.file);
+app.post('/uploadImg/:petId', upload.single('avatar'), function (req, res, next) {
+  res.redirect('/');
 })
+
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));
 

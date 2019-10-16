@@ -155,7 +155,7 @@ class Profile extends Component {
       <div className="profile-container">
         <section className="profile-header">
           <div className="img-name">
-            <img src={`"${activePet.profilePic}"`} alt="pet profile pic" />
+            <img src={`/uploads/pet${activePet.id}.png`} alt="pet profile pic" />
             <h1>{activePet.name}</h1>
           </div>
           <div className="pet-profile-details-container">
@@ -183,6 +183,11 @@ class Profile extends Component {
                 Spayed/Neutered?
                 <input type="text" name="spayed" id="pet-spayed-input" />
               </label>
+              <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
+                <input type="file" name="avatar" />
+                <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
+                <input type="submit"  name="LOAD" />
+              </form>
               <input type="submit" value={buttonText} onClick={this.updatePetDetails} />
             </form>
             <ul className="pet-profile-details">

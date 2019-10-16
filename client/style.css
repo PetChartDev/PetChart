@@ -52,9 +52,26 @@ body {
   display: flex;
   flex-direction: column;
   align-content: flex-start;
+  margin-right: 20px;
   background-color: #e0e0e0;
 }
 
 .home-container {
   color: white;
+}
+
+.img-name{
+  display: flex;
+}
+
+.img-name img{
+  margin-bottom: 20px;
+  margin-left: 20px;
+  border-radius: 50%;
+  width: 100px;
+}
+
+.img-name h1{
+  margin-left: 20px;
+  display: inline-block;
 }
