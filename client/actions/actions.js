@@ -63,7 +63,17 @@ export const updatePet = (petProfile) => ({
 export const addVisitToState = (visitDetails) => ({
   type: types.ADD_VISIT,
   payload: visitDetails,
-})
+});
+
+export const addVaccineToState = (vaccineDetails) => ({
+  type: types.ADD_VACCINE,
+  payload: vaccineDetails,
+});
+
+export const addSurgeryToState = (surgeryDetails) => ({
+  type: types.ADD_SURGERY,
+  payload: surgeryDetails,
+});
 
 export const saveProfile = (userProfile) => ({
   type: types.SAVE_PROFILE,

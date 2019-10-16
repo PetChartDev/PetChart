@@ -241,11 +241,11 @@ const appReducer = (state = initialState, action) => {
       const { userProfile } = state;
 
       console.log("userprofile at top", userProfile);
-
+      let testObj;
       for (let i = 0; i < userProfile.pets.length; i += 1){
         if (userProfile.pets[i].id === responsePet.id) {
           console.log("matched the pet id");
-          userProfile.pets[i] = Object.assign(userProfile.pets[i], responsePet);
+          testObj = Object.assign({}, userProfile.pets[i], responsePet);
         }
       }
 
@@ -255,7 +255,8 @@ const appReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        userProfile
+        userProfile,
+        testObj
       }
     }
       
@@ -271,6 +272,52 @@ const appReducer = (state = initialState, action) => {
         if (userProfile.pets[i].id === responseVisit.pet_id) {
           console.log("matched the pet id");
           userProfile.pets[i].visits.push(responseVisit);
+        }
+      }
+
+      console.log("after", userProfile);
+
+      return {
+        ...state,
+        userProfile,
+      };
+    }
+
+    case types.ADD_VACCINE: {
+      console.log('add vaccine successful: ', action.payload);
+      const responseVaccine = action.payload;
+      console.log("response vaccine is this", responseVaccine);
+      const { userProfile } = state;
+
+      console.log("before", userProfile);
+
+      for (let i = 0; i < userProfile.pets.length; i += 1){
+        if (userProfile.pets[i].id === responseVaccine.pet_id) {
+          console.log("matched the pet id");
+          userProfile.pets[i].visits.push(responseVaccine);
+        }
+      }
+
+      console.log("after", userProfile);
+
+      return {
+        ...state,
+        userProfile,
+      };
+    }
+
+    case types.ADD_SURGERY: {
+      console.log('add surgery successful: ', action.payload);
+      const responseSurgery = action.payload;
+      console.log("response surgery is this", responseSurgery);
+      const { userProfile } = state;
+
+      console.log("before", userProfile);
+
+      for (let i = 0; i < userProfile.pets.length; i += 1){
+        if (userProfile.pets[i].id === responseSurgery.pet_id) {
+          console.log("matched the pet id");
+          userProfile.pets[i].visits.push(responseSurgery);
         }
       }
 

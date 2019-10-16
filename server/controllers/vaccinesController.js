@@ -11,7 +11,7 @@ const vaccinesController = {};
 vaccinesController.createVaccines = (req, res, next) => {
   // incoming request will have all pet data
   // pull out the pet_id, name, date from req body
-  const { name, date, pet_id } = req.body;
+  const { name, date, pet_id } = req.body.vaccine;
 
   const vaccineQuery = {
     name: 'create vaccine',
