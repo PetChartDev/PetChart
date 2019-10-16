@@ -57,10 +57,18 @@ accountsController.createAccount = (req, res, next) => {
 accountsController.login = (req, res, next) => {
   console.log('\n*********** accountsController.login ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   const { email, password, role } = req.body;
+  let queryTargetCommand = null;
+  if(role === 'Owner'){
+    queryTargetCommand = `SELECT * FROM owners WHERE email = '${email}'`;
+  }else if(role === 'Vet') {
+    queryTargetCommand = `SELECT * FROM vets WHERE email = '${email}'`;
+  }else {
+    const err = {message:'Role property must be "Owner" or "Vet".'}
+     return next(err)}
 
   const profileQuery = {
     name: 'retrieve hash password',
-    text: `SELECT * FROM owners WHERE email = '${email}'`,
+    text: queryTargetCommand,
   };
 
   // console.log('this is the hash query obj: ', hashQuery);
