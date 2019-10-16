@@ -238,48 +238,46 @@ class Profile extends Component {
             <ul className="visits">
               {visitsListItems}
             </ul>
-            <div className="vaccines-surgeries">
-              <div className="vaccines-container">
-                <h3>Vaccines</h3>
-                <form className="vaccine-form">
-                  Add a vaccine
-                  {' '}
-                  <br />
-                  <label>
-                    Date:
-                    <input type="text" name="date" id="vaccine-date-input" />
-                  </label>
-                  <label>
-                    Name:
-                    <input type="text" name="name" id="vaccine-name-input" />
-                  </label>
-                  <input type="submit" value="Save Vaccine" onClick={this.addVaccine} />
-                </form>
-                <ul className="vaccines-list">
-                  {vaccinesListItems}
-                </ul>
-              </div>
-              <div className="surgeries-container">
-                <h3>Surgeries</h3>
-                <form className="surgery-form">
-                  Add a surgery
-                  {' '}
-                  <br />
-                  <label>
-                    Date:
-                    <input type="text" name="date" id="surgery-date-input" />
-                  </label>
-                  <label>
-                    Name:
-                    <input type="text" name="name" id="surgery-name-input" />
-                  </label>
-                  <input type="submit" value="Save Surgery" onClick={this.addSurgery} />
-                </form>
-                <ul className="surgeries-list">
-                  {surgeriesListItems}
-                </ul>
-              </div>
             </div>
+          <div className="vaccines-container">
+            <h3>Vaccines</h3>
+            <form className="vaccine-form">
+              Add a vaccine
+              {' '}
+              <br />
+              <label>
+                Date:
+                <input type="text" name="date" id="vaccine-date-input" />
+              </label>
+              <label>
+                Name:
+                <input type="text" name="name" id="vaccine-name-input" />
+              </label>
+              <input type="submit" value="Save Vaccine" onClick={this.addVaccine} />
+            </form>
+            <ul className="vaccines-list">
+              {vaccinesListItems}
+            </ul>
+          </div>
+          <div className="surgeries-container">
+            <h3>Surgeries</h3>
+            <form className="surgery-form">
+              Add a surgery
+              {' '}
+              <br />
+              <label>
+                Date:
+                <input type="text" name="date" id="surgery-date-input" />
+              </label>
+              <label>
+                Name:
+                <input type="text" name="name" id="surgery-name-input" />
+              </label>
+              <input type="submit" value="Save Surgery" onClick={this.addSurgery} />
+            </form>
+            <ul className="surgeries-list">
+              {surgeriesListItems}
+            </ul>
           </div>
         </section>
         : <div></div> }
