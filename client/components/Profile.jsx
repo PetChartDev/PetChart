@@ -17,6 +17,10 @@ import Visit from './Visit.jsx';
 import Vaccine from './Vaccine.jsx';
 import Surgery from './Surgery.jsx';
 
+// Ant Design
+// import { DatePicker } from 'antd';
+// import 'antd/dist/antd.css';
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -77,16 +81,25 @@ class Profile extends Component {
     const form = document.querySelector('.visit-form');
     const date = form.date.value;
     const notes = form.notes.value;
-    const vet = form.vet.value;
-    const file = form.file.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const visitDetails = {
+      petID: this.props.activePet.id,
       date,
       notes,
-      vet,
-      file,
     };
-    return this.props.savePet(petProfile);
+    
+    fetch('/visits/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ visit: visitDetails }),
+    })
+      .then((response) => response.json())
+      .then((visitDetailsObj) => {
+        console.log(visitDetailsObj);
+        this.props.addVisitToState(visitDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   // grab vaccine details from form
@@ -183,12 +196,12 @@ class Profile extends Component {
                 Spayed/Neutered?
                 <input type="text" name="spayed" id="pet-spayed-input" />
               </label>
-              <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
-                <input type="file" name="avatar" />
-                <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
-                <input type="submit"  name="LOAD" />
-              </form>
               <input type="submit" value={buttonText} onClick={this.updatePetDetails} />
+            </form>
+            <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
+              <input type="file" name="avatar" />
+              <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
+              <input type="submit"  name="LOAD" />
             </form>
             <ul className="pet-profile-details">
               <li>
@@ -224,14 +237,6 @@ class Profile extends Component {
               <label>
                 Notes:
                 <input type="text" name="notes" id="visit-notes-input" />
-              </label>
-              <label>
-                Vet:
-                <input type="text" name="vet" id="visit-vet-input" />
-              </label>
-              <label>
-                Upload a file:
-                <input type="text" name="file" id="visit-file-input" />
               </label>
               <input type="submit" value="Save Visit" onClick={this.addVisit} />
             </form>
