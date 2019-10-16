@@ -42,23 +42,6 @@ class Dashboard extends Component {
     super(props);
     // bind activatePet method
     this.activatePet = this.activatePet.bind(this);
-    // parse out relevant pet details from state to pass down to Nav component
-    // this.petNavDetails = props.userProfile.pets.reduce((acc, el) => {
-    //   acc.push({
-    //     id: el.id,
-    //     name: el.name,
-    //   });
-    //   return acc;
-    // }, []);
-    // // parse out relevant pet details from state to pass down to Home component
-    // this.petHomeDetails = props.userProfile.pets.reduce((acc, el) => {
-    //   acc.push({
-    //     id: el.id,
-    //     name: el.name,
-    //     profilePic: el.profilePic,
-    //   });
-    //   return acc;
-    // }, []);
   }
 
   activatePet(event) {

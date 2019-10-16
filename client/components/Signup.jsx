@@ -29,22 +29,6 @@ class Signup extends Component {
     this.setState({role: e.currentTarget.value})
   }
 
-  // uploadImg (e) {
-  //   let imageFormObj = new FormData();
-  //   imageFormObj.append("imageData", e.target.files[0]);
-  //   console.log("E TARGET FILES", e.target.files[0])
-  //   this.setState({img: URL.createObjectURL(e.target.files[0])});
-
-  //   console.log("SETSTATE", this.state.img);
-  //   console.log("IMAGEFORMOBJ", imageFormObj);
-
-  //   fetch('/uploadImg/', {
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //     method: 'POST',
-  //     body: imageFormObj
-  //   }).then(res => console.log(res));
-  // }
-
   render () {
     if (this.state.role === 'Vet') {
       return (
