@@ -4,7 +4,7 @@
   "description": "pet emr for rich people",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "NODE_ENV=production nodemon server/server.js",
     "dev": "NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack-dev-server --open",
     "build": "NODE_ENV=production webpack"
@@ -28,6 +28,7 @@
     "express-session": "^1.13.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "multer": "^1.4.2",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.8.1",
     "pg": "^7.12.1",
@@ -42,8 +43,9 @@
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "eslint": "^6.5.1",
@@ -53,6 +55,7 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "eslint-plugin-react-redux": "^3.0.1",
+    "jest": "^24.9.0",
     "multer": "^1.4.2",
     "style-loader": "^1.0.0",
     "url-loader": "^2.2.0",
