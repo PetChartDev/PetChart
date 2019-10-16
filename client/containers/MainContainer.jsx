@@ -96,21 +96,23 @@ class MainContainer extends Component {
     let createUser;
 
     if (roleSwitch === 'Vet') {
+      const role = roleSwitch;
       const firstName = form[2].value;
       const lastName = form[3].value;
       const practice = form[4].value;
       const email = form[5].value;
       const password = form[6].value;
       createUser = {
-        firstName, lastName, practice, email, password,
+        firstName, lastName, practice, email, password, role
       };
     } else {
+      const role = roleSwitch;
       const firstName = form[2].value;
       const lastName = form[3].value;
       const email = form[4].value;
       const password = form[5].value;
       createUser = {
-        firstName, lastName, email, password,
+        firstName, lastName, email, password, role
       };
     }
 

@@ -19,17 +19,55 @@ import Home from '../components/Home.jsx';
 import Nav from '../components/Nav.jsx';
 import Profile from '../components/Profile.jsx';
 
+const mapStateToProps = (state) => ({
+  userProfile: state.app.userProfile,
+  dashboardPage: state.app.dashboardPage,
+  activePet: state.app.activePet,
+  appPage: state.app.appPage,
+});
+
 class VetDashboard extends Component {
   constructor(props) {
     super(props);
+    this.state ={
+      pets: [],
+      customers: [],
+    };
+    this.getAllPets = this.getAllPets.bind(this);
+    this.getAllCustomers = this.getAllCustomers.bind(this);
+  }
 
+  getAllPets () {
+    fetch('/getAllPets').then(pets => this.setState({ pets }))
+  }
+
+  getAllCustomers () {
+    fetch('/getAllPets').then(customers => this.setState({ customers }))
   }
 
   render () {
+    let petsArray = [], customersArray = [];
+    for (let i = 0; i < this.state.pets.length; i += 1) {
+      petsArray.push(<div>{this.state.pets[i].name}</div>)
+    }
+    for (let i = 0; i < this.state.customers.length; i += 1) {
+      customersArray.push(<div>{this.state.customers[i].name}</div>)
+    }
+    if (petsArray.length === 0) petsArray = "You suck at being a vet. You have no pets."
+    if (customersArray.length === 0) petsArray = "You suck at being a vet. All your customers left you."
+
+    console.log(this.props.userProfile)
     return (
-      <div>I'M AN UNLICENSED VET!</div>
+      <div>
+        <div>I'M AN UNLICENSED VET! WELCOME {this.props.userProfile.owner.firstName}</div>
+        <input type="button" onClick={this.getAllPets} value="Get all pets"></input>
+        <input type="button" onClick={this.getAllCustomers} value="Get all customers"></input>
+        <div>{customersArray}</div>
+        <div>{petsArray}</div>
+      </div>
+
     );
   }
 }
 
-export default VetDashboard;
+export default connect(mapStateToProps)(VetDashboard);
