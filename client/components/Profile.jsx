@@ -69,6 +69,7 @@ class Profile extends Component {
       .then((petObject) => {
         console.log(petObject);
         this.props.updatePet(petObject);
+        this.props.updateActivePet(petObject)
       })
       .catch((err) => console.log(err));
   }

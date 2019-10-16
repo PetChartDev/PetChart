@@ -30,6 +30,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeDBPage: (pageName, activePet) => dispatch(actions.changeDBPage(pageName, activePet)),
   savePet: (petProfile) => dispatch(actions.savePet(petProfile)),
   updatePet: (petProfile) => dispatch(actions.updatePet(petProfile)),
+  updateActivePet: (petProfile) => dispatch(actions.updateActivePet(petProfile)),
   addVisitToState: (visitDetails) => dispatch(actions.addVisitToState(visitDetails)),
   addVaccineToState: (vaccineDetails) => dispatch(actions.addVaccineToState(vaccineDetails)),
   addSurgeryToState: (surgeryDetails) => dispatch(actions.addSurgeryToState(surgeryDetails)),
@@ -92,6 +93,7 @@ class Dashboard extends Component {
           activePet={this.props.activePet}
           savePet={this.props.savePet}
           updatePet={this.props.updatePet}
+          updateActivePet={this.props.updateActivePet}
           addVisitToState={this.props.addVisitToState}
           addVaccineToState={this.props.addVaccineToState}
           addSurgeryToState={this.props.addSurgeryToState}

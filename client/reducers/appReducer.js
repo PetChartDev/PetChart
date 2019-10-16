@@ -240,23 +240,63 @@ const appReducer = (state = initialState, action) => {
 
       const { userProfile } = state;
 
-      console.log("userprofile at top", userProfile);
-      let testObj;
-      for (let i = 0; i < userProfile.pets.length; i += 1){
-        if (userProfile.pets[i].id === responsePet.id) {
-          console.log("matched the pet id");
-          testObj = Object.assign({}, userProfile.pets[i], responsePet);
+      let newProfile = Object.assign({}, userProfile);
+      
+      newProfile.pets = newProfile.pets.map((pet, idx) => {
+        if (idx === responsePet.id) {
+          let nameUpdate, typeUpdate, birthUpdate, genderUpdate, spayedUpdate;
+          responsePet.name !== "" ? nameUpdate = responsePet.name : nameUpdate = pet.name;
+          responsePet.type !== "" ? typeUpdate = responsePet.type : typeUpdate = pet.type;
+          responsePet.birthYear !== "" ? birthUpdate = responsePet.birthYear : birthUpdate = pet.birthYear;
+          responsePet.gender !== "" ? genderUpdate = responsePet.gender : genderUpdate = pet.gender;
+          responsePet.spayed !== "" ? spayedUpdate = responsePet.spayed : spayedUpdate = pet.spayed;
+          return {
+            ...pet,
+            name: nameUpdate,
+            type: typeUpdate,
+            birthYear: birthUpdate,
+            gender: genderUpdate,
+            spayed: spayedUpdate,
+          }
         }
-      }
-
-      // console.log("userprofile's updated pet", userProfile.pets[responsePet.id]);
-
-      console.log("userprofile at bottom", userProfile);
+        return pet;
+      })
 
       return {
         ...state,
-        userProfile,
-        testObj
+        userProfile: newProfile,
+      }
+    }
+
+    case types.UPDATE_ACTIVE_PET: {
+      console.log('updated pet:', action.payload);
+      const responsePet = action.payload;
+
+      const { activePet } = state;
+
+      let newActivePet = Object.assign({}, activePet);
+
+      let nameUpdate, typeUpdate, birthUpdate, genderUpdate, spayedUpdate;
+      responsePet.name !== "" ? nameUpdate = responsePet.name : nameUpdate = activePet.name;
+      responsePet.type !== "" ? typeUpdate = responsePet.type : typeUpdate = activePet.type;
+      responsePet.birthYear !== "" ? birthUpdate = responsePet.birthYear : birthUpdate = activePet.birthYear;
+      responsePet.gender !== "" ? genderUpdate = responsePet.gender : genderUpdate = activePet.gender;
+      responsePet.spayed !== "" ? spayedUpdate = responsePet.spayed : spayedUpdate = activePet.spayed;
+      
+      newActivePet.name = nameUpdate;
+      newActivePet.type = typeUpdate;
+      newActivePet.birthYear = birthUpdate;
+      newActivePet.gender = genderUpdate;
+      newActivePet.spayed = spayedUpdate;
+
+  
+      // newActivePet.visits = responsePet.visits 
+      // newActivePet.vaccines = responsePet.vaccines
+      // newActivePet.surgeries = responsePet.surgeries
+      
+      return {
+        ...state,
+        activePet: newActivePet,
       }
     }
       
@@ -271,7 +311,7 @@ const appReducer = (state = initialState, action) => {
       for (let i = 0; i < userProfile.pets.length; i += 1){
         if (userProfile.pets[i].id === responseVisit.pet_id) {
           console.log("matched the pet id");
-          userProfile.pets[i].visits.push(responseVisit);
+          userProfile.pets[i].visits.concat(responseVisit);
         }
       }
 

@@ -60,6 +60,11 @@ export const updatePet = (petProfile) => ({
   payload: petProfile,
 });
 
+export const updateActivePet = (petProfile) => ({
+  type: types.UPDATE_ACTIVE_PET,
+  payload: petProfile,
+});
+
 export const addVisitToState = (visitDetails) => ({
   type: types.ADD_VISIT,
   payload: visitDetails,
