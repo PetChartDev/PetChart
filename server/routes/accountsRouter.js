@@ -4,6 +4,8 @@ const accountsController = require('../controllers/accountsController');
 const petsController = require('../controllers/petsController');
 const visitsController = require('../controllers/visitsController');
 const surgeryController = require('../controllers/surgeryController');
+const cookiesController = require('../controllers/cookiesController');
+const sessionsController = require('../controllers/sessionsController');
 
 router.post('/register', accountsController.createAccount, (req, res) => {
   res.status(200).send('Thanks for the request!');
@@ -18,6 +20,8 @@ router.post('/register', accountsController.createAccount, (req, res) => {
  */
 router.post('/login',
   accountsController.login,
+  cookiesController.setSSIDCookie,
+  sessionsController.createSession,
   petsController.getPets,
   visitsController.getVisits,
   surgeryController.getSurgeries,
@@ -34,7 +38,6 @@ router.post('/login',
       const { profileMatch } = res.locals;
       res.status(401).json({ profileMatch });
     }
-  }
-); 
+  });
 
 module.exports = router;
