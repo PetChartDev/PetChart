@@ -231,7 +231,33 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         userProfile,
-      }; }
+      };
+    }
+
+    case types.UPDATE_PET: {
+      console.log('updated pet:', action.payload);
+      const responsePet = action.payload;
+
+      const { userProfile } = state;
+
+      console.log("userprofile at top", userProfile);
+
+      for (let i = 0; i < userProfile.pets.length; i += 1){
+        if (userProfile.pets[i].id === responsePet.id) {
+          console.log("matched the pet id");
+          userProfile.pets[i] = Object.assign(userProfile.pets[i], responsePet);
+        }
+      }
+
+      // console.log("userprofile's updated pet", userProfile.pets[responsePet.id]);
+
+      console.log("userprofile at bottom", userProfile);
+
+      return {
+        ...state,
+        userProfile
+      }
+    }
 
     case types.SAVE_PROFILE:
 

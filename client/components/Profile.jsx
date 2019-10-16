@@ -24,7 +24,6 @@ class Profile extends Component {
     this.addVisit = this.addVisit.bind(this);
     this.addVaccine = this.addVaccine.bind(this);
     this.addSurgery = this.addSurgery.bind(this);
-    this.savePet = this.props.savePet.bind(this);
   }
 
   // grab updated/newly added pet details
@@ -39,7 +38,10 @@ class Profile extends Component {
     const gender = form.gender.value;
     const spayed = form.spayed.value;
     const { ownerID } = this.props;
-    const petProfile = {
+    const petID = this.props.activePet.id;
+    // @todo: include vetID in the props and pass it along
+    let method = 'POST'; 
+    let petProfile = {
       name,
       type,
       birthYear,
@@ -47,9 +49,13 @@ class Profile extends Component {
       spayed,
       ownerID,
     };
+    if (petID) {
+      petProfile = Object.assign(petProfile, { petID: petID });
+      method = 'PATCH'
+    }
 
     fetch('/pets/', {
-      method: 'POST',
+      method,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -58,7 +64,7 @@ class Profile extends Component {
       .then((response) => response.json())
       .then((petObject) => {
         console.log(petObject);
-        this.savePet(petObject);
+        this.props.updatePet(petObject);
       })
       .catch((err) => console.log(err));
   }
@@ -171,7 +177,7 @@ class Profile extends Component {
                 Spayed/Neutered?
                 <input type="text" name="spayed" id="pet-spayed-input" />
               </label>
-              <input type="submit" value="Save Pet Details" onClick={this.updatePetDetails} />
+              <input type="submit" value="Update Pet Details" onClick={this.updatePetDetails} />
             </form>
             <ul className="pet-profile-details">
               <li>
@@ -192,6 +198,7 @@ class Profile extends Component {
             </ul>
           </div>
         </section>
+        { this.props.activePet.id ? 
         <section className="profile-body">
           <div className="visits-container">
             <h3>Visits</h3>
@@ -264,8 +271,8 @@ class Profile extends Component {
             </div>
           </div>
         </section>
+        : <div></div> }
         <button type="button" onClick={() => this.props.changeDBPage('home')}>Home</button>
-        {/* <button type="button" onClick={() => this.props.savePet(this.props.pet)}>Save Pet</button> */}
       </div>
     );
   }

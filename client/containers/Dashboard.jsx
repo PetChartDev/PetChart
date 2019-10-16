@@ -29,6 +29,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   changeDBPage: (pageName, activePet) => dispatch(actions.changeDBPage(pageName, activePet)),
   savePet: (petProfile) => dispatch(actions.savePet(petProfile)),
+  updatePet: (petProfile) => dispatch(actions.updatePet(petProfile)),
   logout: (newPage) => dispatch(actions.logout(newPage)),
 });
 
@@ -83,14 +84,19 @@ class Dashboard extends Component {
         childPage = homeComponent;
         break;
       case 'profile':
-        childPage = <Profile changeDBPage={this.props.changeDBPage} activePet={this.props.activePet} savePet={this.props.savePet} ownerID={this.props.userProfile.owner.id} />;
+        childPage = <Profile
+          changeDBPage={this.props.changeDBPage}
+          activePet={this.props.activePet}
+          savePet={this.props.savePet}
+          updatePet={this.props.updatePet}
+          ownerID={this.props.userProfile.owner.id} />;
         break;
       default:
         break;
     }
     return (
       // always render Nav component and whatever childPage is set to
-      <div>
+      <div className="nav-container">
         <Nav logout={this.props.logout} changeDBPage={this.props.changeDBPage} activatePet={this.activatePet} owner={this.props.userProfile.owner.firstName} pets={this.props.userProfile.pets} />
         {childPage}
       </div>
