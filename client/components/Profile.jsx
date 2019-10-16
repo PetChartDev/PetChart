@@ -69,6 +69,7 @@ class Profile extends Component {
       .then((petObject) => {
         console.log(petObject);
         this.props.updatePet(petObject);
+        this.props.updateActivePet(petObject)
       })
       .catch((err) => console.log(err));
   }
@@ -110,12 +111,25 @@ class Profile extends Component {
     const form = document.querySelector('.vaccine-form');
     const date = form.date.value;
     const name = form.name.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const vaccineDetail = {
+      pet_id: this.props.activePet.id,
       date,
       name,
     };
-    return this.props.savePet(petProfile);
+
+    fetch('/vaccines/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vaccine: vaccineDetail }),
+    })
+      .then((response) => response.json())
+      .then((vaccineDetailsObj) => {
+        console.log("VACCINE RETURN FROM CONTROLLER", vaccineDetailsObj);
+        this.props.addVaccineToState(vaccineDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   // grab surgery details from form
@@ -126,12 +140,25 @@ class Profile extends Component {
     const form = document.querySelector('.surgery-form');
     const date = form.date.value;
     const name = form.name.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const surgeryDetail = {
+      petID: this.props.activePet.id,
       date,
       name,
     };
-    return this.props.savePet(petProfile);
+    
+    fetch('/surgeries/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ surgery: surgeryDetail }),
+    })
+      .then((response) => response.json())
+      .then((surgeryDetailsObj) => {
+        console.log(surgeryDetailsObj);
+        this.props.addSurgeryToState(surgeryDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   render() {
