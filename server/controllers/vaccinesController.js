@@ -57,8 +57,6 @@ vaccinesController.createVaccines = (req, res, next) => {
 };
 
 vaccinesController.getVaccines = (req, res, next) => {
-  console.log('vacc hist controller hit')
-  console.log('bod', req.body.pet_id)
   const petID = req.body.pet_id;
 // via pet id
 const vaccineQuery = {

@@ -10,5 +10,6 @@ petQuery.getPetsFromOwner = 'SELECT * FROM pets WHERE owner_id = $1'; // tested
 // updating pet in pets table
 petQuery.updatePetWithoutVet = 'UPDATE pets SET (name, type, gender, spayed, birth_year) = ($1, $2, $3, $4, $5) WHERE pet_id=$6 RETURNING *';
 petQuery.updatePet = 'UPDATE pets SET (name, type, gender, spayed, birth_year) = ($1, $2, $3, $4, $5) WHERE pet_id=$6 RETURNING *';
+// delete one pet from table
 
 module.exports = petQuery;

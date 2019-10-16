@@ -6,11 +6,20 @@ const petsController = require('../controllers/petsController');
  * @endpoint : '/pets/'
  * @method : GET
  * @returns -> an array of all pets via JSON
+ * 
  */
+
+router.delete('/', petsController.deletePet, (req,res)=>{
+    const {deletedPet} = res.locals;
+    res.status(200).json(deletedPet)
+});
+
 router.get('/', petsController.getPets, (req, res) => {
   const { pets } = res.locals;
   res.status(200).json(pets);
 });
+
+
 
 /**
  * @endpoint : '/pets/'
