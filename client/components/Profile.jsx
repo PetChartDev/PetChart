@@ -130,6 +130,12 @@ class Profile extends Component {
     const vaccinesListItems = [];
     const surgeriesListItems = [];
 
+    let buttonText = 'Save Pet';
+    let formHeaderText = 'Add New Pet';
+    if (activePet.id) {
+      buttonText = 'Update Pet';
+      formHeaderText = 'Update Pet Information';
+    }
     // if activePet exists, generate arrays of Visit, Vaccine, and Surgery components
     if (activePet.id) {
       for (let i = 0; i < 5; i += 1) {
@@ -154,7 +160,7 @@ class Profile extends Component {
           </div>
           <div className="pet-profile-details-container">
             <form className="pet-profile-details-form">
-              Add/update pet details:
+             {formHeaderText} :
               {' '}
               <br />
               <label>
@@ -177,7 +183,7 @@ class Profile extends Component {
                 Spayed/Neutered?
                 <input type="text" name="spayed" id="pet-spayed-input" />
               </label>
-              <input type="submit" value="Update Pet Details" onClick={this.updatePetDetails} />
+              <input type="submit" value={buttonText} onClick={this.updatePetDetails} />
             </form>
             <ul className="pet-profile-details">
               <li>
