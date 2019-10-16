@@ -3,7 +3,7 @@ const surgeryController = require('../controllers/surgeryController');
 
 router.post('/', surgeryController.createSurgery, (req, res) => {
   const { newSurgery } = res.locals;
-  res.json(newSurgery);
+  res.status(200).json(newSurgery);
 });
 
 module.exports = router;

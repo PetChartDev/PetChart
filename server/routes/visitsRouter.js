@@ -11,7 +11,7 @@ router.post('/', visitsController.createVisit, (req, res) => {
   const { newVisit } = res.locals;
 
   if (newVisit) {
-    res.json(newVisit);
+    res.status(200).json(newVisit);
   }
 });
 
