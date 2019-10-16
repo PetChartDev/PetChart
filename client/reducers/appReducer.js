@@ -301,71 +301,56 @@ const appReducer = (state = initialState, action) => {
     }
       
     case types.ADD_VISIT: {
-      console.log('add visit successful: ', action.payload);
       const responseVisit = action.payload;
-      console.log("response visit is this", responseVisit);
-      const { userProfile } = state;
 
-      console.log("before", userProfile);
+      const newUserProfile = Object.assign({}, state.userProfile);
 
-      for (let i = 0; i < userProfile.pets.length; i += 1){
-        if (userProfile.pets[i].id === responseVisit.pet_id) {
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseVisit.pet_id) {
           console.log("matched the pet id");
-          userProfile.pets[i].visits.concat(responseVisit);
+          newUserProfile.pets[i].visits.push(responseVisit);
         }
       }
 
-      console.log("after", userProfile);
-
       return {
         ...state,
-        userProfile,
+        userProfile: newUserProfile,
       };
     }
 
     case types.ADD_VACCINE: {
-      console.log('add vaccine successful: ', action.payload);
       const responseVaccine = action.payload;
-      console.log("response vaccine is this", responseVaccine);
-      const { userProfile } = state;
 
-      console.log("before", userProfile);
+      const newUserProfile = Object.assign({}, state.userProfile);
 
-      for (let i = 0; i < userProfile.pets.length; i += 1){
-        if (userProfile.pets[i].id === responseVaccine.pet_id) {
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseVaccine.pet_id) {
           console.log("matched the pet id");
-          userProfile.pets[i].visits.push(responseVaccine);
+          newUserProfile.pets[i].vaccines.push(responseVaccine);
         }
       }
 
-      console.log("after", userProfile);
-
       return {
         ...state,
-        userProfile,
+        userProfile: newUserProfile,
       };
     }
 
     case types.ADD_SURGERY: {
-      console.log('add surgery successful: ', action.payload);
       const responseSurgery = action.payload;
-      console.log("response surgery is this", responseSurgery);
-      const { userProfile } = state;
 
-      console.log("before", userProfile);
+      const newUserProfile = Object.assign({}, state.userProfile);
 
-      for (let i = 0; i < userProfile.pets.length; i += 1){
-        if (userProfile.pets[i].id === responseSurgery.pet_id) {
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseSurgery.pet_id) {
           console.log("matched the pet id");
-          userProfile.pets[i].visits.push(responseSurgery);
+          newUserProfile.pets[i].surgeries.push(responseSurgery);
         }
       }
 
-      console.log("after", userProfile);
-
       return {
         ...state,
-        userProfile,
+        userProfile: newUserProfile,
       };
     }
 

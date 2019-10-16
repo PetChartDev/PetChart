@@ -16,8 +16,7 @@ vaccinesController.createVaccines = (req, res, next) => {
   const vaccineQuery = {
     name: 'create vaccine',
     text: 'INSERT INTO vaccines (name, date, pet_id) VALUES ($1, $2, $3) RETURNING *',
-    values: [name, date, pet_id],
-    rowMode: 'array'
+    values: [name, date, pet_id]
   };
 
   db.connect((err, client, release) => {
@@ -26,25 +25,34 @@ vaccinesController.createVaccines = (req, res, next) => {
       error.message = 'Error in vaccinesController db.connect method';
       return next(error);
     }
-    client.query(vaccineQuery, (error, success) => {
-      // catch error
-      if (error) {
-        const { detail } = error;
-        const errorObj = {};
-        errorObj.message = detail;
-        console.log('Error inside query: ', error)
-        return next(errorObj);
-      }
+    client.query(vaccineQuery)
+      .then((newVaccine) => {
+        console.log("VAX CONTROLLER LOG", newVaccine)
+        release();
+        // successful query
+        res.locals.newVaccine = newVaccine.rows[0];
+        return next();
+      })
+      .catch((vaccineQueryErr) => next(vaccineQueryErr));
+    
+    // (error, success) => {
+    //   // catch error
+    //   if (error) {
+    //     const { detail } = error;
+    //     const errorObj = {};
+    //     errorObj.message = detail;
+    //     console.log('Error inside query: ', error)
+    //     return next(errorObj);
+    //   }
 
-      console.log('this is the success obj: ', success.rows);
-      // returns newly created vaccine to res object
-      res.locals.vaccines = success.rows;
+    //   console.log('this is the success obj: ', success.rows);
+    //   // returns newly created vaccine to res object
+    //   res.locals.vaccines = success.rows;
 
-      // release the instance of the db connection from the db pool
-      release();
-      return next();
-
-    });
+    //   // release the instance of the db connection from the db pool
+    //   release();
+    //   return next();
+    // })
   });
 };
 

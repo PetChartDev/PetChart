@@ -126,7 +126,7 @@ class Profile extends Component {
     })
       .then((response) => response.json())
       .then((vaccineDetailsObj) => {
-        console.log(vaccineDetailsObj);
+        console.log("VACCINE RETURN FROM CONTROLLER", vaccineDetailsObj);
         this.props.addVaccineToState(vaccineDetailsObj);
       })
       .catch((err) => console.log(err));
