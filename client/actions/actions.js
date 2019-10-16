@@ -58,6 +58,11 @@ export const savePet = (petProfile) => ({
 export const updatePet = (petProfile) => ({
   type: types.UPDATE_PET,
   payload: petProfile,
+});
+
+export const addVisitToState = (visitDetails) => ({
+  type: types.ADD_VISIT,
+  payload: visitDetails,
 })
 
 export const saveProfile = (userProfile) => ({

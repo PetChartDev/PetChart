@@ -30,6 +30,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeDBPage: (pageName, activePet) => dispatch(actions.changeDBPage(pageName, activePet)),
   savePet: (petProfile) => dispatch(actions.savePet(petProfile)),
   updatePet: (petProfile) => dispatch(actions.updatePet(petProfile)),
+  addVisitToState: (visitDetails) => dispatch(actions.addVisitToState(visitDetails)),
   logout: (newPage) => dispatch(actions.logout(newPage)),
 });
 
@@ -89,6 +90,7 @@ class Dashboard extends Component {
           activePet={this.props.activePet}
           savePet={this.props.savePet}
           updatePet={this.props.updatePet}
+          addVisitToState={this.props.addVisitToState}
           ownerID={this.props.userProfile.owner.id} />;
         break;
       default:
