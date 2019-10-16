@@ -9,7 +9,7 @@ const petsController = require('../controllers/petsController');
  */
 router.get('/', petsController.getPets, (req, res) => {
   const { pets } = res.locals;
-  res.json(pets);
+  res.status(200).json(pets);
 });
 
 /**
@@ -19,7 +19,7 @@ router.get('/', petsController.getPets, (req, res) => {
  */
 router.post('/', petsController.addPet, (req, res) => {
   const { newPet } = res.locals;
-  res.json(newPet);
+  res.status(200).json(newPet);
 });
 
 /**
@@ -29,7 +29,7 @@ router.post('/', petsController.addPet, (req, res) => {
  */
 router.patch('/', petsController.updatePet, (req, res) => {
   const { updatedPet } = res.locals;
-  res.json(updatedPet);
+  res.status(200).json(updatedPet);
 });
 
 module.exports = router;
