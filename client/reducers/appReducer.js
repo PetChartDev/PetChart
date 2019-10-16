@@ -258,6 +258,29 @@ const appReducer = (state = initialState, action) => {
         userProfile
       }
     }
+      
+    case types.ADD_VISIT: {
+      console.log('add visit successful: ', action.payload);
+      const responseVisit = action.payload;
+      console.log("response visit is this", responseVisit);
+      const { userProfile } = state;
+
+      console.log("before", userProfile);
+
+      for (let i = 0; i < userProfile.pets.length; i += 1){
+        if (userProfile.pets[i].id === responseVisit.pet_id) {
+          console.log("matched the pet id");
+          userProfile.pets[i].visits.push(responseVisit);
+        }
+      }
+
+      console.log("after", userProfile);
+
+      return {
+        ...state,
+        userProfile,
+      };
+    }
 
     case types.SAVE_PROFILE:
 
