@@ -12,4 +12,9 @@ router.get('/', vetsController.searchVets, (req, res) => {
   res.status(200).json(vets);
 })
 
+router.get('/getallcustomers', vetsController.getAllCustomers, (req, res) => {
+const allCustomers = res.locals.allCustomers.returnedClients.rows;
+res.status(200).json(allCustomers);
+})
+
 module.exports = router;
