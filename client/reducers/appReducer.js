@@ -354,6 +354,25 @@ const appReducer = (state = initialState, action) => {
       };
     }
 
+    case types.DELETE_PET: {
+      const petID = action.payload;
+
+      const newUserProfile = Object.assign({}, state.userProfile);
+
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === petID) {
+          console.log("matched the pet id");
+          delete newUserProfile.pets[i];
+        }
+      }
+
+      return {
+        ...state,
+        userProfile: newUserProfile,
+        dashboardPage: 'home'
+      };
+    }
+
     case types.SAVE_PROFILE:
 
       // alert('user profile loaded!')

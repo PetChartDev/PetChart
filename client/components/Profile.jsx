@@ -28,6 +28,7 @@ class Profile extends Component {
     this.addVisit = this.addVisit.bind(this);
     this.addVaccine = this.addVaccine.bind(this);
     this.addSurgery = this.addSurgery.bind(this);
+    this.deletePet = this.deletePet.bind(this);
   }
 
   // grab updated/newly added pet details
@@ -159,6 +160,17 @@ class Profile extends Component {
         this.props.addSurgeryToState(surgeryDetailsObj);
       })
       .catch((err) => console.log(err));
+  }
+
+  deletePet () {
+    fetch('/pets/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({petID: this.props.activePet.id})
+    }).then(res => res.json())
+    .then((removePetId) => this.props.deletePetFromState(removePetId));
   }
 
   render() {
@@ -310,6 +322,9 @@ class Profile extends Component {
             <ul className="surgeries-list">
               {surgeriesListItems}
             </ul>
+          </div>
+          <div>
+            <input type="button" onClick={this.deletePet} value="Delete Pet" />
           </div>
         </section>
         : <div></div> }

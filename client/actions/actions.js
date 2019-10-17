@@ -80,6 +80,11 @@ export const addSurgeryToState = (surgeryDetails) => ({
   payload: surgeryDetails,
 });
 
+export const deletePetFromState = (petID) => ({
+  type: types.DELETE_PET,
+  payload: petID,
+});
+
 export const saveProfile = (userProfile) => ({
   type: types.SAVE_PROFILE,
   payload: userProfile,

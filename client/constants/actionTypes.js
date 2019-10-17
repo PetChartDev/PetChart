@@ -18,6 +18,7 @@ export const UPDATE_ACTIVE_PET = 'UPDATE_ACTIVE_PET';
 export const ADD_VISIT = 'ADD_VISIT';
 export const ADD_VACCINE = 'ADD_VACCINE';
 export const ADD_SURGERY = 'ADD_SURGERY';
+export const DELETE_PET = 'DELETE_PET';
 export const PUBLIC_PAGE = 'PUBLIC_PAGE';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const LOGOUT = 'LOGOUT';
