@@ -18,8 +18,8 @@ import Vaccine from './Vaccine.jsx';
 import Surgery from './Surgery.jsx';
 
 // Ant Design
-// import { DatePicker } from 'antd';
-// import 'antd/dist/antd.css';
+import { PageHeader, Button, Form, Row, Descriptions, Col } from "antd";
+import 'antd/dist/antd.css';
 
 class Profile extends Component {
   constructor(props) {
@@ -208,64 +208,139 @@ class Profile extends Component {
       }
     }
 
+    // Design
+    const formItemLayout = {
+      labelCol: {span: 4},
+      wrapperCol: {span: 14}
+    }
+
     return (
       <div className="profile-container">
+      
         <section className="profile-header">
-          <div className="img-name">
-            <img src={`/uploads/pet${activePet.id}.png`} alt="pet profile pic" />
-            <h1>{activePet.name}</h1>
-          </div>
-          <div className="pet-profile-details-container">
-            <form className="pet-profile-details-form">
-             {formHeaderText} :
+          {this.props.activePet.name ?
+            <div>
+            <PageHeader
+              title={activePet.name}
+              style={{
+                border: "1px solid rgb(235, 237, 240)"
+              }}
+              tags={[
+                <div>
+                  <Button key="edit-1" shape="round" type="default">Edit Pet</Button>
+                  {' '}
+                  <Button key="delete-2" shape="round" type="danger" onClick={this.deletePet}>Delete Pet</Button>
+                </div>
+              ]}
+            >
+              <Row className="content" type="flex">
+                <div className="main" style={{ flex: 1 }}>
+                  <Descriptions layout="horizontal" title="Pet Details">
+                    <Descriptions.Item key="description-0" label="Born">{activePet.birthYear}</Descriptions.Item>
+                    <Descriptions.Item key="description-1" label="Species">{activePet.type}</Descriptions.Item>
+                    <Descriptions.Item key="description-2" label="Gender">{activePet.gender}</Descriptions.Item>
+                    <Descriptions.Item key="description-3" label="Neutered">{activePet.spayed ? activePet.spayed.toString() : null}</Descriptions.Item>
+                    <Descriptions.Item key="description-4" label="Last Visit">{visitsListItems[0] ? visitsListItems[0].date : 'No Visit'}</Descriptions.Item>
+                  </Descriptions>
+                </div>
+                <div
+                  className="extra"
+                  style={{
+                    marginLeft: 80
+                  }}
+                >
+                  <img
+                    src={`/uploads/pet${activePet.id}.png`}
+                    alt="Pet Profile"
+                    width={200}
+                  />
+                </div>
+              </Row>
+            </PageHeader>
+            <Row gutter={24}>
+                <div className="details-container">
+                  {visitsListItems.length != 0 ?
+                    <Col span={16}>
+                      <div className="visits-container">
+                        <h4 className="ant-typography">Visits</h4>
+                        <ul className="visits">
+                          {visitsListItems}
+                        </ul>
+                      </div>
+                    </Col>
+                    : <div></div> }
+                  {visitsListItems.length != 0 || surgeriesListItems != 0 ?
+                    <Col span={8}>
+                      <div className="vaccines-surgeries-container">
+                        <div className="vaccines-container">
+                          <h4 className="ant-typography">Vaccines</h4>
+                          <ul className="vaccines-list">
+                            {vaccinesListItems}
+                          </ul>
+                        </div>
+                        <div className="surgeries-container">
+                          <h4 className="ant-typography">Surgeries</h4>
+                          <ul className="surgeries-list">
+                            {surgeriesListItems}
+                          </ul>
+                        </div>
+                      </div>
+                    </Col>
+                    : <div></div>}
+              </div>
+            </Row>
+            </div>
+            : <div></div>
+        }
+          
+            <div className="pet-profile-details-container">
+              <Form layout="horizontal" className="pet-profile-details-form">
+                {formHeaderText} :
               {' '}
               <br />
-              <label>
-                Name:
-                <input type="text" name="name" id="pet-name-input" />
-              </label>
-              <label>
-                Type:
-                <input type="text" name="type" id="pet-type-input" />
-              </label>
-              <label>
-                Birth Year:
-                <input type="text" name="birthyear" id="pet-birth-year-input" />
-              </label>
-              <label>
-                Gender:
-                <input type="text" name="gender" id="pet-gender-input" />
-              </label>
-              <label>
-                Spayed/Neutered?
-                <input type="text" name="spayed" id="pet-spayed-input" />
-              </label>
-              <input type="submit" value={buttonText} onClick={this.updatePetDetails} />
-            </form>
-            <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
-              <input type="file" name="avatar" />
-              <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
-              <input type="submit"  name="LOAD" />
-            </form>
-            <ul className="pet-profile-details">
-              <li>
-                Born:
-                {' '}
-                {activePet.birthYear}
-              </li>
-              <li>
-                Gender:
-                {' '}
-                {activePet.gender}
-              </li>
-              <li>
-                Neutered:
-                {' '}
-                {activePet.spayed ? activePet.spayed.toString() : null}
-              </li>
-            </ul>
-          </div>
-        </section>
+              <Row gutter={[16, 16]}>
+              <Col span={8}>
+                <label>
+                  Name:
+                <input className="ant-input" type="text" name="name" id="pet-name-input" />
+                </label>
+              </Col>
+              <Col span={8}>
+                <label>
+                  Type:
+                <input className="ant-input" type="text" name="type" id="pet-type-input" />
+                </label>
+                </Col>
+                <Col span={8}>
+                <label>
+                  Birth Year:
+                <input className="ant-input" type="text" name="birthyear" id="pet-birth-year-input" />
+                  </label>
+                </Col>
+                <Col span={12}>
+                <label>
+                  Gender:
+                <input className="ant-input" type="text" name="gender" id="pet-gender-input" />
+                </label>
+                </Col>
+                <Col span={12}>
+                <label>
+                  Spayed/Neutered?
+                <input className="ant-input" type="text" name="spayed" id="pet-spayed-input" />
+                </label>
+                </Col>
+                </Row>
+                <Button shape="round" type="primary" onClick={this.updatePetDetails}>{buttonText}</Button>
+              </Form>
+              <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
+                <input type="file" name="avatar" />
+                <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
+                <input className="ant-btn ant-btn-primary ant-btn-round" type="submit" name="LOAD" />
+              </form>
+            </div>
+
+          </section>
+         
         { this.props.activePet.name ? 
         <section className="profile-body">
           <div className="visits-container">
@@ -282,15 +357,12 @@ class Profile extends Component {
                 Notes:
                 <input type="text" name="notes" id="visit-notes-input" />
               </label>
-              <input type="submit" value="Save Visit" onClick={this.addVisit} />
+              <Button shape="round" type="primary" onClick={this.addVisit}>Save Visit</Button>
             </form>
-            <ul className="visits">
-              {visitsListItems}
-            </ul>
             </div>
           <div className="vaccines-container">
             <h3>Vaccines</h3>
-            <form className="vaccine-form">
+              <Form className="vaccine-form" layout="horizontal">
               Add a vaccine
               {' '}
               <br />
@@ -302,11 +374,8 @@ class Profile extends Component {
                 Name:
                 <input type="text" name="name" id="vaccine-name-input" />
               </label>
-              <input type="submit" value="Save Vaccine" onClick={this.addVaccine} />
-            </form>
-            <ul className="vaccines-list">
-              {vaccinesListItems}
-            </ul>
+                <Button shape="round" type="primary" onClick={this.addVaccine}>Save Vaccine</Button>
+            </Form>
           </div>
           <div className="surgeries-container">
             <h3>Surgeries</h3>
@@ -322,14 +391,9 @@ class Profile extends Component {
                 Name:
                 <input type="text" name="name" id="surgery-name-input" />
               </label>
-              <input type="submit" value="Save Surgery" onClick={this.addSurgery} />
+                <Button shape="round" type="primary" onClick={this.addSurgery}>Save Surgery</Button>
             </form>
-            <ul className="surgeries-list">
-              {surgeriesListItems}
-            </ul>
-          </div>
-          <div>
-            <input type="button" onClick={this.deletePet} value="Delete Pet" />
+          
           </div>
         </section>
         : <div></div> }
