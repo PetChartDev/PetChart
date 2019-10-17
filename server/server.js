@@ -96,8 +96,15 @@ app.get('/plzwork',
   vaccinesController.getVaccines,
   (req, res) => {
     const { session } = res.headers;
-    const { owner, pets, role } = res.locals;
-    res.status(200).set({ session }).json({ owner, pets, role });
+    const { role } = res.locals;
+
+    if (res.locals.vet) {
+      const { vet } = res.locals;
+      res.status(200).set({ session }).json({ vet });
+    } else {
+      const { owner, pets } = res.locals;
+      res.status(200).set({ session }).json({ owner, pets });
+    }
   });
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));

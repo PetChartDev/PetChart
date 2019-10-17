@@ -9,13 +9,16 @@ const db = require('../../database/database');
 petsController.getPets = (req, res, next) => {
   console.log('\n*********** petsController.getPets ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
+  const { role, ssid } = res.locals;
+  if (role === 'Vet' || ssid[0] === 'v') return next();
+
   const { passwordMatch, profileMatch, session } = res.locals;
 
   if ((profileMatch && passwordMatch) || session) {
     // NOTES: id will be retrieved from a user logging in
     console.log('res.locals: ', res.locals);
     let id = '';
-    if (!res.locals.owner) id = res.locals.ssid;
+    if (!res.locals.owner) id = res.locals.ssid.substring(1);
     else id = res.locals.owner.id;
     console.log(id);
     db.connect((err, client, release) => {
@@ -143,7 +146,7 @@ petsController.deletePet = (req, res, next) => {
     return next(err);
   }
   // destructure request body
-  const {petID} = req.body;
+  const { petID } = req.body;
   petDeleteCommand = `DELETE FROM pets WHERE pet_id=${petID}`;
 
   db.connect((err, client, release) => {
@@ -151,7 +154,7 @@ petsController.deletePet = (req, res, next) => {
     client.query(petDeleteCommand)
       .then((deletedPet) => {
         release();
-        res.locals.deletedPet = petID
+        res.locals.deletedPet = petID;
         console.log(`Pet #${petID} successfully removed from database`);
         return next();
       })
