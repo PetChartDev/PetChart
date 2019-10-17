@@ -69,8 +69,13 @@ class Profile extends Component {
       .then((response) => response.json())
       .then((petObject) => {
         console.log(petObject);
-        this.props.updatePet(petObject);
-        this.props.updateActivePet(petObject)
+        if (method === 'PATCH') {
+          this.props.updatePet(petObject);
+          this.props.updateActivePet(petObject) 
+        } else {
+          this.props.savePet(petObject);
+          this.props.updateActivePet(petObject);
+        }
       })
       .catch((err) => console.log(err));
   }
