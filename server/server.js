@@ -85,6 +85,8 @@ app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 //   console.log(res.headers);
 // });
 
+app.get('/logout', accountsController.logout);
+
 app.get('/plzwork',
   sessionsController.findSession,
   accountsController.getOwner,

@@ -127,6 +127,11 @@ accountsController.login = (req, res, next) => {
   });
 };
 
+accountsController.logout = (req, res, next) => {
+  res.clearCookie('ssid');
+  return next();
+}
+
 accountsController.getOwner = (req, res, next) => {
   db.connect((err, client, release) => {
     client.query(`SELECT * FROM owners WHERE owner_id=${res.locals.ssid}`, (profileQueryErr, profile) => {

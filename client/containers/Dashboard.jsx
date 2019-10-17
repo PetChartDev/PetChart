@@ -43,6 +43,7 @@ class Dashboard extends Component {
     super(props);
     // bind activatePet method
     this.activatePet = this.activatePet.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   activatePet(event) {
@@ -59,6 +60,13 @@ class Dashboard extends Component {
     }
     console.log('pet not found');
     return 'pet not found';
+  }
+
+  logoutUser() {
+    fetch('/logout')
+      .then((response) => {
+        this.props.logout("login");
+    })
   }
 
   render() {
@@ -90,7 +98,13 @@ class Dashboard extends Component {
     return (
       // always render Nav component and whatever childPage is set to
       <div className="nav-container">
-        <Nav logout={this.props.logout} changeDBPage={this.props.changeDBPage} activatePet={this.activatePet} owner={this.props.userProfile.owner.firstName} pets={this.props.userProfile.pets} />
+        <Nav
+          logoutUser={this.logoutUser}
+          changeDBPage={this.props.changeDBPage}
+          activatePet={this.activatePet}
+          owner={this.props.userProfile.owner.firstName}
+          pets={this.props.userProfile.pets}
+        />
         {childPage}
       </div>
     );

@@ -30,7 +30,7 @@ const Nav = (props) => {
       {' '}
       {props.owner}
       <button type="button" className="navBarButton" onClick={() => props.changeDBPage('home')}>Home</button>
-      <button type="button" className="navBarButton" onClick = { () => props.logout("login")}>Logout</button>
+      <button type="button" className="navBarButton" onClick = { () => props.logoutUser()}>Logout</button>
       {petButtons}
     </div>
   );
