@@ -3,6 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const mongoose = require('mongoose');
+
 const accountsRouter = require('./routes/accountsRouter');
 const petsRouter = require('./routes/petsRouter');
 const vetsRouter = require('./routes/vetsRouter');
@@ -11,14 +13,18 @@ const surgeryRouter = require('./routes/surgeryRouter');
 const vaccinesRouter = require('./routes/vaccinesRouter');
 const sessionsController = require('./controllers/sessionsController');
 
+const petsController = require('./controllers/petsController');
+const visitsController = require('./controllers/visitsController');
+const surgeryController = require('./controllers/surgeryController');
+
 const storage = multer.diskStorage({
-  destination (req, file, cb) {
-  cb(null, './uploads');
-},
-  filename (req, file, cb) {
-  console.log("this is inside upload", req.params)
-  cb(null, "pet" + req.params.petId + '.png');
-},
+  destination(req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename(req, file, cb) {
+    console.log('this is inside upload', req.params);
+    cb(null, `pet${req.params.petId}.png`);
+  },
 });
 
 
@@ -28,6 +34,9 @@ const upload = multer({ storage });
 const app = express();
 
 const PORT = 3000;
+
+const mongoURI = 'mongodb+srv://teamUGG:uggly@petchart2-nvjty.mongodb.net/';
+mongoose.connect(mongoURI, { dbName: 'petchart2' });
 
 // db.query('SELECT * FROM pets', (err, res) => {
 //   console.log('this is the db response: ', res.rows);
@@ -70,15 +79,21 @@ app.post('/uploadImg/:petId', upload.single('avatar'), (req, res, next) => {
 
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
-app.get('/', sessionsController.findSession, (req, res, next) => res.sendFile(path.resolve(__dirname, '../client/index.html'), {
-  headers: {
-    session: res.locals.session,
-  },
-},
-(err) => {
-  console.log('res.locals: ', res.locals, 'err: ', err);
-  if (err) return next({ message: err });
-}));
+// app.get('/dummyAPI', (req, res) => {
+//   console.log(res.headers);
+// });
+
+app.get('/plzwork',
+  sessionsController.findSession,
+  petsController.getPets,
+  visitsController.getVisits,
+  surgeryController.getSurgeries,
+  (req, res) => {
+    const { owner, pets, role } = res.locals;
+    res.status(200).json({ owner, pets, role });
+  });
+
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));
 
 
 /**

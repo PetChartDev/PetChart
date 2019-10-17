@@ -11,11 +11,13 @@ const db = require('../../database/database');
 visitsController.createVisit = (req, res, next) => {
   console.log('\n*********** visitsController.createVisit ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   // Might add a file key later
-  if(!req.body.visit){
-    const err = {message:"Error: visitsController.createVisit: Undefined visit keys"}
+  if (!req.body.visit) {
+    const err = { message: 'Error: visitsController.createVisit: Undefined visit keys' };
     return next(err);
-  } 
-  const { date, notes, petID, vetID } = req.body.visit;
+  }
+  const {
+ date, notes, petID, vetID 
+} = req.body.visit;
 
   if (req.body.visit) {
     // if vetID exist then we query normally otherwise we query without the vet_id column added
@@ -33,7 +35,7 @@ visitsController.createVisit = (req, res, next) => {
         .catch((visitQueryErr) => next(visitQueryErr));
     });
   }
-}
+};
 
 /**
 * @description gets all Visits for each pet
@@ -41,9 +43,9 @@ visitsController.createVisit = (req, res, next) => {
 */
 visitsController.getVisits = (req, res, next) => {
   console.log('\n*********** visitsController.getVisits ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
-  const { passwordMatch, profileMatch } = res.locals;
-  
-  if (profileMatch && passwordMatch) {
+  const { passwordMatch, profileMatch, session } = res.locals;
+
+  if ((profileMatch && passwordMatch) || session) {
     const { pets } = res.locals;
     if (pets) {
       // queries for visits for each pet, returning unresolved promises
@@ -67,7 +69,7 @@ visitsController.getVisits = (req, res, next) => {
             return next();
           })
           .catch((err) => {
-            console.log("CATCH ERROR ***********", err);
+            console.log('CATCH ERROR ***********', err);
             return next(err);
           });
       });
@@ -79,7 +81,6 @@ visitsController.getVisits = (req, res, next) => {
     // this return is if profile & password match fails
     return next();
   }
-
-}
+};
 
 module.exports = visitsController;
