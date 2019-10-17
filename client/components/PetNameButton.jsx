@@ -14,7 +14,7 @@
 import React from 'react';
 
 const petNameButton = (props) => (
-  <button id={props.petId} type="button" className="navBarButton" onClick={(event) => props.activatePet(event)}>{props.petName}</button>
+  <button id={props.petId} type="button" className="ant-btn ant-btn-primary ant-btn-round" onClick={(event) => props.activatePet(event)}>{props.petName}</button>
 );
 
 export default petNameButton;

@@ -29,7 +29,7 @@ const Home = (props) => {
       <div className="home-wrapper">
         HomePage
         {petButtons}
-        <button type="button" onClick={() => props.changeDBPage('profile', emptyPet)}>Add a Pet</button>
+        <button type="button" className="ant-btn ant-btn-default ant-btn-round" onClick={() => props.changeDBPage('profile', emptyPet)}>Add a Pet</button>
       </div>
     </div>
   );

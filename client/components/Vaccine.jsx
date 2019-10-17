@@ -17,8 +17,8 @@ const Vaccine = (props) => {
 
   return (
     <li className={`"vaccine-${vaccine.id}"`}>
-      <p>{vaccine.date}</p>
-      <p>{vaccine.name}</p>
+      <p className="date">{vaccine.date}</p>
+      <p className="notes">{vaccine.name}</p>
     </li>
   );
 };

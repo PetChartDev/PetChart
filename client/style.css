@@ -40,8 +40,12 @@ body {
   background-color: #ffffff;
 }
 
-.profile-container {
-  background-color: #61f2f5;
+.home-container {
+  margin-top: 10px;
+}
+
+.home-wrapper button {
+  margin-right: 7px;
 }
 
 .nav-container{
@@ -54,18 +58,14 @@ body {
   align-content: flex-start;
   margin-right: 20px;
   margin-left: 20px;
-  background-color: #e0e0e0;
-  width: 10%;
 }
 
 .home-wrapper {
   display: flex;
   align-content: space-around;
-  background-color: darkgray;
 }
 
 .home-wrapper {
-  background-color: lightgrey;
 }
 
 .img-name{
@@ -96,7 +96,11 @@ body {
   align-items: stretch;
 }
 
-input[type="submit"], input[type="button"] {
+.nav-bar button{
+  margin-bottom: 5px;
+}
+
+/* input[type="submit"], input[type="button"] {
   background-color: #61f2f5;
   color: #504e4e;
   border: none;
@@ -114,4 +118,29 @@ input[type="submit"], input[type="button"] {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 3px;
+} */
+
+.details-container li {
+  list-style-type: none;
+  display: flex;
+}
+
+.details-container li p {
+  flex: 1 1 0;
+  padding: 16px 24px;
+  border: 1px solid #e8e8e8;
+  margin: 0;
+}
+
+.details-container li p.notes{
+  background-color: #fafafa;
+}
+
+.details-container ul{
+  margin: 0;
+  padding: 0;
+}
+
+.pet-profile-details-form{
+  margin-bottom: 30px;
 }

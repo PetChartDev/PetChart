@@ -17,9 +17,8 @@ const Surgery = (props) => {
 
   return (
     <li className={`"surgery-${surgery.id}"`}>
-      <p>{surgery.date}</p>
-      <p>{surgery.vet}</p>
-      <p>{surgery.name}</p>
+      <p className="date">{surgery.date}</p>
+      <p className="notes">{surgery.name}</p>
     </li>
   );
 };

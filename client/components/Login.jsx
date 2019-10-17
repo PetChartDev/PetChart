@@ -74,8 +74,8 @@ Owner
 Vet
           </label>
           <br />
-          <input type="submit" value="Login" />
-          <input type="button" value="Go to Signup" onClick={() => this.props.publicPage('signup')} />
+          <input className="ant-btn ant-btn-primary ant-btn-round" type="submit" value="Login" />
+          <input className="ant-btn ant-btn-danger ant-btn-round" type="button" value="Go to Signup" onClick={() => this.props.publicPage('signup')} />
         </form>
 
       </div>
