@@ -14,7 +14,7 @@ module.exports = {
     hot: true,
     proxy: [
       {
-        context: ['/register', '/pets', '/login', '/logout', '/records', '/accounts', '/uploadImg', '/uploads', '/visits', '/vaccines', '/surgeries', '/'],
+        context: ['/register', '/vets', '/pets', '/login', '/logout', '/records', '/accounts', '/uploadImg', '/uploads', '/visits', '/vaccines', '/surgeries', '/'],
         target: 'http://localhost:3000',
       },
     ],

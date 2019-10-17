@@ -38,24 +38,32 @@ class VetDashboard extends Component {
   }
 
   getAllPets() {
-    fetch('/getAllPets').then((pets) => this.setState({ pets }));
+    fetch('/getAllPets', {
+      method: 'POST',
+      body: JSON.stringify({ vet: { vetID: 2 } })
+
+    }).then((pets) => this.setState({ pets }));
   }
 
   getAllCustomers() {
-    fetch('/getAllPets').then((customers) => this.setState({ customers }));
+    fetch('/vets/getAllCustomers', {
+      headers: { "Content-type": "application/json" },
+      method: 'POST',
+      body: JSON.stringify({ vet: { vetID: 2 } })
+    }).then((customers) => customers.json())
+    .then(customers => this.setState({ customers }));
   }
 
   render() {
+    console.log(this.state.customers);
     let petsArray = []; const
       customersArray = [];
     for (let i = 0; i < this.state.pets.length; i += 1) {
       petsArray.push(<div>{this.state.pets[i].name}</div>);
     }
     for (let i = 0; i < this.state.customers.length; i += 1) {
-      customersArray.push(<div>{this.state.customers[i].name}</div>);
+      customersArray.push(<div>{this.state.customers[i].first_name + " " + this.state.customers[i].last_name}</div>);
     }
-    if (petsArray.length === 0) petsArray = 'You suck at being a vet. You have no pets.';
-    if (customersArray.length === 0) petsArray = 'You suck at being a vet. All your customers left you.';
 
     console.log(this.props.userProfile);
     return (

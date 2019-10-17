@@ -60,7 +60,7 @@ class Signup extends Component {
       </div>
     )
   }
-  else {
+  else { 
     return (
       <div>
         Signup Form:<br />
