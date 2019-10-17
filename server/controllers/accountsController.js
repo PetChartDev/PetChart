@@ -103,15 +103,25 @@ accountsController.login = (req, res, next) => {
           if (!passwordMatch) {
             return next();
           }
+          res.locals.role = role;
           // if bcrypt.compare returns true
           // save all of the query profile data into res.locals obj
-          res.locals.owner = {
-            id: profile.rows[0].owner_id,
-            firstName: profile.rows[0].first_name,
-            lastName: profile.rows[0].last_name,
-            email: profile.rows[0].email,
-          };
-          res.locals.role = role;
+          if (role === 'Owner') {
+            res.locals.owner = {
+              id: profile.rows[0].owner_id,
+              firstName: profile.rows[0].first_name,
+              lastName: profile.rows[0].last_name,
+              email: profile.rows[0].email,
+            };
+          }
+          if (role === 'Vet') {
+            res.locals.owner = {
+              id: profile.rows[0].vet_id,
+              firstName: profile.rows[0].first_name,
+              lastName: profile.rows[0].last_name,
+              email: profile.rows[0].email,
+            };
+          }
           return next();
         });
       } else {

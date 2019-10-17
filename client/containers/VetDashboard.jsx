@@ -38,11 +38,11 @@ class VetDashboard extends Component {
   }
 
   getAllPets () {
-    fetch('/getAllPets').then(pets => this.setState({ pets }))
+    fetch(`/getAllPets/:${this.props.userProfile.owner.id}`).then(pets => this.setState({ pets }))
   }
 
   getAllCustomers () {
-    fetch('/getAllPets').then(customers => this.setState({ customers }))
+    fetch(`/getAllCustomers/:${this.props.userProfile.owner.id}`).then(customers => this.setState({ customers }))
   }
 
   render () {
@@ -54,7 +54,7 @@ class VetDashboard extends Component {
       customersArray.push(<div>{this.state.customers[i].name}</div>)
     }
     if (petsArray.length === 0) petsArray = "You suck at being a vet. You have no pets."
-    if (customersArray.length === 0) petsArray = "You suck at being a vet. All your customers left you."
+    if (customersArray.length === 0) customersArray = "You suck at being a vet. All your customers left you."
 
     console.log(this.props.userProfile)
     return (
