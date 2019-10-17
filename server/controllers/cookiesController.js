@@ -9,11 +9,11 @@ const cookiesController = {};
  * @body : { res.cookie: {ssid: ...} }
  */
 cookiesController.setSSIDCookie = (req, res, next) => {
-  console.log('\n*********** cookiesController.createAccount ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  console.log('\n*********** cookiesController.setSSIDCookie ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
-  if (!res.locals.owner.id) return next({ message: 'from cookieController.setSSIDCookie: no owner id on res.locals' });
-  console.log('owner id: ', res.locals.owner.id);
-  const ssid = res.locals.owner.id;
+  if (!res.locals.owner && !res.locals.vet) return next({ message: 'from cookieController.setSSIDCookie: no owner or vet on res.locals' });
+  // console.log('owner id: ', res.locals.owner.id);
+  const ssid = res.locals.owner ? `o${res.locals.owner.id}` : `v${res.locals.vet.id}`;
   console.log('ssid: ', ssid);
   res.cookie('ssid', JSON.stringify(ssid), { encode: String, httpOnly: true });
   res.locals.ssid = ssid;

@@ -30,8 +30,13 @@ router.post('/login',
   (req, res) => {
     if (res.locals.profileMatch) {
       if (res.locals.passwordMatch) {
-        const { owner, pets, role } = res.locals;
-        res.status(200).json({ owner, pets, role });
+        if (res.locals.owner) {
+          const { owner, pets, role } = res.locals;
+          res.status(200).json({ owner, pets, role });
+        } else {
+          const { vet, role } = res.locals;
+          res.status(200).json({ vet, role });
+        }
       } else {
         const { passwordMatch } = res.locals;
         res.status(401).json({ passwordMatch });
