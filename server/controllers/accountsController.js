@@ -7,24 +7,27 @@ const SALT_WORK_FACTOR = 10;
 
 accountsController.createAccount = (req, res, next) => {
   console.log('\n*********** accountsController.createAccount ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
-  const { firstName, lastName, role, email, practice } = req.body;
+  const {
+    firstName, lastName, role, email, practice,
+  } = req.body;
   bcrypt.hash(req.body.password, SALT_WORK_FACTOR)
     .then((hash) => {
       // This logic block looks at the role property and determines whether or not client is a Vet or pet Owner.
       // Changes the target of the query
-      // new account values contains the necessary data schema to add to either vets or owners table. 
+      // new account values contains the necessary data schema to add to either vets or owners table.
       let queryTargetCommand = null;
       let newAccountValues = null;
-      if(role === 'Owner'){
+      if (role === 'Owner') {
         newAccountValues = [firstName, lastName, email, hash];
-        queryTargetCommand = 'INSERT INTO owners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *'
-      }else if(role === 'Vet') {
-        newAccountValues = [practice,firstName, lastName, email, hash]
-        queryTargetCommand = 'INSERT INTO vets (practice_name,first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING *'
-      }else {
-        const err = {message:'Role property must be "Owner" or "Vet".'}
-         return next(err)}
-      /////////////////////////////////////////////////
+        queryTargetCommand = 'INSERT INTO owners (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *';
+      } else if (role === 'Vet') {
+        newAccountValues = [practice, firstName, lastName, email, hash];
+        queryTargetCommand = 'INSERT INTO vets (practice_name,first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+      } else {
+        const err = { message: 'Role property must be "Owner" or "Vet".' };
+        return next(err);
+      }
+      // ///////////////////////////////////////////////
       const query = {
         name: 'add-user',
         text: queryTargetCommand,
@@ -34,23 +37,23 @@ accountsController.createAccount = (req, res, next) => {
 
       db.connect((err, client, release) => {
         if (err) {
-          console.log(err)
-          const error = {message: 'ERROR inside createAccount db.connect: '};
-          return next(error)
+          console.log(err);
+          const error = { message: 'ERROR inside createAccount db.connect: ' };
+          return next(error);
         }
         client.query(query, (err, success) => {
-          release()
+          release();
           if (err) {
             const { detail } = err;
             const errorObj = {};
             errorObj.message = detail;
             return next(errorObj);
           }
-  
+
           console.log('create account success: ', success);
           return next();
         });
-      })
+      });
     });
 };
 
@@ -58,13 +61,14 @@ accountsController.login = (req, res, next) => {
   console.log('\n*********** accountsController.login ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   const { email, password, role } = req.body;
   let queryTargetCommand = null;
-  if(role === 'Owner'){
+  if (role === 'Owner') {
     queryTargetCommand = `SELECT * FROM owners WHERE email = '${email}'`;
-  }else if(role === 'Vet') {
+  } else if (role === 'Vet') {
     queryTargetCommand = `SELECT * FROM vets WHERE email = '${email}'`;
-  }else {
-    const err = {message:'Role property must be "Owner" or "Vet".'}
-     return next(err)}
+  } else {
+    const err = { message: 'Role property must be "Owner" or "Vet".' };
+    return next(err);
+  }
 
   const profileQuery = {
     name: 'retrieve hash password',
@@ -73,6 +77,7 @@ accountsController.login = (req, res, next) => {
 
   // console.log('this is the hash query obj: ', hashQuery);
   db.connect((err, client, release) => {
+    if (err) console.log('query error: ', err);
     client.query(profileQuery, (profileQueryErr, profile) => {
       release();
       if (profileQueryErr) {
@@ -86,18 +91,17 @@ accountsController.login = (req, res, next) => {
       if (profile.rows[0]) {
         // this is the response obj if the profile exists
         res.locals.profileMatch = true;
-  
+
         // run a bcrypt comparison of req.body.password with encrypted password
         bcrypt.compare(password, profile.rows[0].password, (bcryptErr, passwordMatch) => {
-  
           if (bcryptErr) {
             console.log('error from bcrypt compare: ', bcryptErr);
             return next(bcryptErr);
           }
-  
+
           // bcrypt compare returns a boolean, save it as a property on the res.locals obj
           res.locals.passwordMatch = passwordMatch;
-  
+
           // if bcrypt.compare returns false, we don't want to save any profile info
           // and move to the next middleware
           if (!passwordMatch) {
@@ -120,7 +124,33 @@ accountsController.login = (req, res, next) => {
         return next();
       }
     });
+  });
+};
 
+accountsController.getOwner = (req, res, next) => {
+  db.connect((err, client, release) => {
+    client.query(`SELECT * FROM owners WHERE owner_id=${res.locals.ssid}`, (profileQueryErr, profile) => {
+      release();
+      if (profileQueryErr) {
+        console.log('error from password retrievel query: ', profileQueryErr);
+        return next(profileQueryErr);
+      }
+      // test if the profile query returned a saved profile
+      // query always returns an array
+      // if profile doesn't exist, the array will be empty
+      // query response comes in profile.rows array -> values of array are objs
+      if (profile.rows[0]) {
+      // save all of the query profile data into res.locals obj
+        res.locals.owner = {
+          id: profile.rows[0].owner_id,
+          firstName: profile.rows[0].first_name,
+          lastName: profile.rows[0].last_name,
+          email: profile.rows[0].email,
+        };
+        // res.locals.role = role;
+        return next();
+      }
+    });
   });
 };
 

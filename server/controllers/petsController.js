@@ -7,7 +7,7 @@ const db = require('../../database/database');
  * @requirements : a owner_id(id) stored inside res.locals
  */
 petsController.getPets = (req, res, next) => {
-  console.log('\n*********** petsController.getPets ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  console.log('\n*********** petsController.getPets ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
   const { passwordMatch, profileMatch, session } = res.locals;
 

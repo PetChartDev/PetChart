@@ -21,12 +21,26 @@ class Login extends Component {
   componentWillMount() {
     console.log('about to mount');
     fetch('/plzwork')
-      .then((response) => response.headers.get('session'))
-      .then((session) => {
-        console.log(session);
-        if (session) {
+      .then((response) => (response.json()
+        .then((json) => ({
+          session: response.headers.get('session'),
+          body: json,
+        }))))
+      .then((responseObj) => {
+        console.log('responseObj: ', responseObj);
+        const { session } = responseObj;
+        const parsedResp = responseObj.body;
+        console.log('just got parsed: ', parsedResp);
+        const userProfile = {
+          owner: parsedResp.owner,
+          pets: parsedResp.pets,
+          role: 'Owner',
+        };
+        console.log('line 26 session: ', session);
+        if (session === 'true') {
+          console.log('ciao', this.props);
+          this.props.createUserProfile(userProfile);
           this.props.publicPage('dashboard');
-          this.props.saveProfile(session);
         }
       })
       .catch((err) => console.log('fuck you: ', err));

@@ -12,8 +12,8 @@ surgeryController.createSurgery = (req, res, next) => {
   console.log('\n*********** surgeryController.createSurgery ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
   const {
- name, date, petID, visitID 
-} = req.body.surgery;
+    name, date, petID, visitID,
+  } = req.body.surgery;
 
   if (req.body.surgery) {
     // if visitID exist then we query normally otherwise we query without the visit_id column added
@@ -26,11 +26,11 @@ surgeryController.createSurgery = (req, res, next) => {
           release();
           // successful query
           const {
- surgery_id, name, date, pet_id 
-} = newSurgery.rows[0];
+            surgery_id, name, date, pet_id,
+          } = newSurgery.rows[0];
           res.locals.newSurgery = {
- id: surgery_id, pet_id, name, date 
-};
+            id: surgery_id, pet_id, name, date,
+          };
           return next();
         })
         .catch((surgeryQueryErr) => {
@@ -46,7 +46,7 @@ surgeryController.createSurgery = (req, res, next) => {
 * @requirements : a pets array stored inside res.locals
 */
 surgeryController.getSurgeries = (req, res, next) => {
-  console.log('\n*********** surgeryController.getSurgeries ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  console.log('\n*********** surgeryController.getSurgeries ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   const { passwordMatch, profileMatch, session } = res.locals;
 
   if ((profileMatch && passwordMatch) || session) {

@@ -53,11 +53,18 @@ sessionsController.findSession = (req, res, next) => {
   const ssidVal = Number(req.cookies.ssid);
   Session.findOne({ ssid: ssidVal }, (err, session) => {
     if (session) {
+      res.headers = {
+        session: true,
+      };
       res.locals.session = true;
       res.locals.ssid = session.ssid;
       return next();
     }
-    return res.sendFile(path.resolve(__dirname, '../../client/index.html'));
+    return res.sendFile(path.resolve(__dirname, '../../client/index.html'), {
+      headers: {
+        session: res.locals.session,
+      },
+    });
   });
 };
 

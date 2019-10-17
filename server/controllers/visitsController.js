@@ -16,8 +16,8 @@ visitsController.createVisit = (req, res, next) => {
     return next(err);
   }
   const {
- date, notes, petID, vetID 
-} = req.body.visit;
+    date, notes, petID, vetID,
+  } = req.body.visit;
 
   if (req.body.visit) {
     // if vetID exist then we query normally otherwise we query without the vet_id column added
@@ -42,7 +42,7 @@ visitsController.createVisit = (req, res, next) => {
 * @requirements : a pets array stored inside res.locals
 */
 visitsController.getVisits = (req, res, next) => {
-  console.log('\n*********** visitsController.getVisits ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  console.log('\n*********** visitsController.getVisits ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   const { passwordMatch, profileMatch, session } = res.locals;
 
   if ((profileMatch && passwordMatch) || session) {

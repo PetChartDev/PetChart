@@ -14,6 +14,7 @@ const vaccinesRouter = require('./routes/vaccinesRouter');
 const sessionsController = require('./controllers/sessionsController');
 
 const petsController = require('./controllers/petsController');
+const accountsController = require('./controllers/accountsController');
 const visitsController = require('./controllers/visitsController');
 const surgeryController = require('./controllers/surgeryController');
 
@@ -85,12 +86,14 @@ app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 app.get('/plzwork',
   sessionsController.findSession,
+  accountsController.getOwner,
   petsController.getPets,
   visitsController.getVisits,
   surgeryController.getSurgeries,
   (req, res) => {
+    const { session } = res.headers;
     const { owner, pets, role } = res.locals;
-    res.status(200).json({ owner, pets, role });
+    res.status(200).set({ session }).json({ owner, pets, role });
   });
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));
