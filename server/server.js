@@ -17,6 +17,7 @@ const petsController = require('./controllers/petsController');
 const accountsController = require('./controllers/accountsController');
 const visitsController = require('./controllers/visitsController');
 const surgeryController = require('./controllers/surgeryController');
+const vaccinesController = require('./controllers/vaccinesController');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -90,6 +91,7 @@ app.get('/plzwork',
   petsController.getPets,
   visitsController.getVisits,
   surgeryController.getSurgeries,
+  vaccinesController.getVaccines,
   (req, res) => {
     const { session } = res.headers;
     const { owner, pets, role } = res.locals;

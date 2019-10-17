@@ -56,42 +56,45 @@ vaccinesController.createVaccines = (req, res, next) => {
   });
 };
 
+/**
+* @description gets all Vaccines for each pet
+* @requirements : a pets array stored inside res.locals
+*/
 vaccinesController.getVaccines = (req, res, next) => {
-  const petID = req.body.pet_id;
-// via pet id
-const vaccineQuery = {
-  name: 'get vaccine',
-  text: `SELECT * FROM vaccines WHERE pet_id=${petID}`,
-}
+  console.log('\n*********** vaccineController.getVaccines ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  const { passwordMatch, profileMatch, session } = res.locals;
 
-db.connect((err, client, release) => {
-  if (err) {
-    error = {};
-    error.message = 'Error in vaccinesController db.connect method';
-    return next(error);
-  }
-  client.query(vaccineQuery, (error, success) => {
-    // catch error
-    if (error) {
-      const { detail } = error;
-      const errorObj = {};
-      errorObj.message = detail;
-      console.log('Error inside getVaccines query: ', error)
-      return next(errorObj);
+  if ((profileMatch && passwordMatch) || session) {
+    const { pets } = res.locals;
+    if (pets) {
+      // queries for visits for each pet, returning unresolved promises
+      // combinedPromises = [<Promise>, <Promise>, ...]
+      db.connect((err, client, release) => {
+        if (err) return next({ message: "Vaccines Controller line 78" + err });
+        const combinedPromises = pets.map((pet) => client.query(`SELECT * FROM vaccines WHERE pet_id=${pet.id}`));
+        // release client after every query
+        release();
+        Promise.all(combinedPromises)
+          .then((vaccineList) => {
+            /**
+             * @vaccine is a single vaccine object
+             * @index is used to get a current pet to add a surgeries property with the
+             * value being an array of vaccine objects
+             */
+            vaccineList.forEach((vaccine, index) => {
+              // vaccine.rows is an array of surgeries
+              // [ {id: 1, date: '08/10/2019, name: 'stomach transplant'}, ...]
+              pets[index].vaccines = vaccine.rows;
+            });
+            return next();
+          })
+          .catch((err) => {
+            console.log('CATCH ERROR ***********', err);
+            return next(err);
+          });
+      });
     }
-
-    console.log('this is the success obj: ', success.rows);
-    // returns query results to res object
-    res.locals.vaccines = success.rows;
-
-    // release the instance of the db connection from the db pool
-    release();
-    return next();
-
-  });
-});
-
-
-}
+  }
+};
 
 module.exports = vaccinesController;

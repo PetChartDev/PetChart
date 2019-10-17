@@ -7,7 +7,7 @@ router.post('/', vaccinesController.createVaccines, (req, res, next) => {
   res.status(200).json(newVaccine);
 });
 
-router.post('/history',vaccinesController.getVaccines, (req,res,next)=>{
+router.get('/',vaccinesController.getVaccines, (req,res,next)=>{
   const {vaccines} = res.locals;
   res.status(200).json(vaccines);
 });

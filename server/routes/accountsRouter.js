@@ -4,6 +4,7 @@ const accountsController = require('../controllers/accountsController');
 const petsController = require('../controllers/petsController');
 const visitsController = require('../controllers/visitsController');
 const surgeryController = require('../controllers/surgeryController');
+const vaccinesController = require('../controllers/vaccinesController');
 const cookiesController = require('../controllers/cookiesController');
 const sessionsController = require('../controllers/sessionsController');
 
@@ -25,6 +26,7 @@ router.post('/login',
   petsController.getPets,
   visitsController.getVisits,
   surgeryController.getSurgeries,
+  vaccinesController.getVaccines,
   (req, res) => {
     if (res.locals.profileMatch) {
       if (res.locals.passwordMatch) {
