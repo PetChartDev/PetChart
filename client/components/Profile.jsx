@@ -331,12 +331,14 @@ class Profile extends Component {
                 </Col>
                 </Row>
                 <Button shape="round" type="primary" onClick={this.updatePetDetails}>{buttonText}</Button>
-              </Form>
+            </Form>
+            {this.props.activePet.name ?
               <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
                 <input type="file" name="avatar" />
                 <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
                 <input className="ant-btn ant-btn-primary ant-btn-round" type="submit" name="LOAD" />
               </form>
+              : <div></div>}
             </div>
 
           </section>
@@ -397,7 +399,6 @@ class Profile extends Component {
           </div>
         </section>
         : <div></div> }
-        <button type="button" onClick={() => this.props.changeDBPage('home')}>Home</button>
       </div>
     );
   }
