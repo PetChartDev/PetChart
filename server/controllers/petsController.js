@@ -138,12 +138,12 @@ petsController.updatePet = (req, res, next) => {
 petsController.deletePet = (req, res, next) => {
   console.log('\n*********** petsController.deletePet ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
   // handle error if no pet key on request body
-  if (!req.body.pet) {
+  if (!req.body) {
     const err = { message: 'Error: petsController.deletePet: Undefined pet keys' };
     return next(err);
   }
   // destructure request body
-  const { petID } = req.body.pet;
+  const {petID} = req.body;
   petDeleteCommand = `DELETE FROM pets WHERE pet_id=${petID}`;
 
   db.connect((err, client, release) => {
@@ -151,7 +151,7 @@ petsController.deletePet = (req, res, next) => {
     client.query(petDeleteCommand)
       .then((deletedPet) => {
         release();
-        res.locals.deletedPet = { message: `Pet #${petID} successfully removed from database` };
+        res.locals.deletedPet = petID
         console.log(`Pet #${petID} successfully removed from database`);
         return next();
       })

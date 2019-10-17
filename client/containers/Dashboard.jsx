@@ -34,6 +34,7 @@ const mapDispatchToProps = (dispatch) => ({
   addVisitToState: (visitDetails) => dispatch(actions.addVisitToState(visitDetails)),
   addVaccineToState: (vaccineDetails) => dispatch(actions.addVaccineToState(vaccineDetails)),
   addSurgeryToState: (surgeryDetails) => dispatch(actions.addSurgeryToState(surgeryDetails)),
+  deletePetFromState: (petID) => dispatch(actions.deletePetFromState(petID)),
   logout: (newPage) => dispatch(actions.logout(newPage)),
 });
 
@@ -80,6 +81,7 @@ class Dashboard extends Component {
           addVisitToState={this.props.addVisitToState}
           addVaccineToState={this.props.addVaccineToState}
           addSurgeryToState={this.props.addSurgeryToState}
+          deletePetFromState={this.props.deletePetFromState}
           ownerID={this.props.userProfile.owner.id} />;
         break;
       default:
