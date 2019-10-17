@@ -1,27 +1,28 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const multer = require('multer');
 const accountsRouter = require('./routes/accountsRouter');
 const petsRouter = require('./routes/petsRouter');
 const vetsRouter = require('./routes/vetsRouter');
 const visitsRouter = require('./routes/visitsRouter');
 const surgeryRouter = require('./routes/surgeryRouter');
 const vaccinesRouter = require('./routes/vaccinesRouter');
-const multer = require('multer');
+const sessionsController = require('./controllers/sessionsController');
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+const storage = multer.diskStorage({
+  destination (req, file, cb) {
   cb(null, './uploads');
 },
-  filename: function (req, file, cb) {
+  filename (req, file, cb) {
   console.log("this is inside upload", req.params)
   cb(null, "pet" + req.params.petId + '.png');
-}
+},
 });
 
 
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage });
 
 
 const app = express();
@@ -46,6 +47,8 @@ app.use(bodyParser.urlencoded(), (req, res, next) => {
   return next();
 });
 
+app.use(cookieParser());
+
 app.use('/accounts', accountsRouter);
 
 app.use('/pets', petsRouter);
@@ -60,13 +63,22 @@ app.use('/surgeries', surgeryRouter);
 
 app.use('/build', express.static(path.resolve(__dirname, '../build')));
 
-app.post('/uploadImg/:petId', upload.single('avatar'), function (req, res, next) {
+
+app.post('/uploadImg/:petId', upload.single('avatar'), (req, res, next) => {
   res.redirect('/');
-})
+});
 
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../client/index.html')));
+app.get('/', sessionsController.findSession, (req, res, next) => res.sendFile(path.resolve(__dirname, '../client/index.html'), {
+  headers: {
+    session: res.locals.session,
+  },
+},
+(err) => {
+  console.log('res.locals: ', res.locals, 'err: ', err);
+  if (err) return next({ message: err });
+}));
 
 
 /**
@@ -87,7 +99,7 @@ app.all('*', (req, res) => {
 app.use('/', (err, req, res, next) => {
   const defaultError = {
     status: 500,
-    message: 'express error caught unknown middleware error'
+    message: 'express error caught unknown middleware error',
   };
   const newError = { ...defaultError, ...err };
   console.log('This is newError object: ', newError);

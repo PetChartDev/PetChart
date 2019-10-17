@@ -1,15 +1,23 @@
-const db = require('../../database/database');
+const hash = require('../constants/hash');
 
-const cookieController = {};
+const cookiesController = {};
 
 /**
- * @description adds a session cookie to the user on successful login
- * @requirements : a owner_id stored inside req.body
- * @optionals : 
- * @body : { res.cookie: {session: ...} }
+ * @description adds a hashed ssid cookie to the user's browser on successful login
+ * @requirements : owner.id stored on res.locals
+ * @optionals :
+ * @body : { res.cookie: {ssid: ...} }
  */
-cookieController.addCookie = (req, res, err) => {
+cookiesController.setSSIDCookie = (req, res, next) => {
+  console.log('\n*********** cookiesController.createAccount ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
-}
+  if (!res.locals.owner.id) return next({ message: 'from cookieController.setSSIDCookie: no owner id on res.locals' });
+  console.log('owner id: ', res.locals.owner.id);
+  const ssid = hash(res.locals.owner.id);
+  console.log('ssid: ', ssid);
+  res.cookie('ssid', JSON.stringify(ssid), { encode: String, httpOnly: true });
+  res.locals.ssid = ssid;
+  return next();
+};
 
-module.exports = cookieController;
+module.exports = cookiesController;
