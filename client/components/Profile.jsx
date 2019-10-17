@@ -266,7 +266,7 @@ class Profile extends Component {
             </ul>
           </div>
         </section>
-        { this.props.activePet.id ? 
+        { this.props.activePet.name ? 
         <section className="profile-body">
           <div className="visits-container">
             <h3>Visits</h3>
