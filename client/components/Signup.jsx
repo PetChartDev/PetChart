@@ -29,22 +29,6 @@ class Signup extends Component {
     this.setState({role: e.currentTarget.value})
   }
 
-  // uploadImg (e) {
-  //   let imageFormObj = new FormData();
-  //   imageFormObj.append("imageData", e.target.files[0]);
-  //   console.log("E TARGET FILES", e.target.files[0])
-  //   this.setState({img: URL.createObjectURL(e.target.files[0])});
-
-  //   console.log("SETSTATE", this.state.img);
-  //   console.log("IMAGEFORMOBJ", imageFormObj);
-
-  //   fetch('/uploadImg/', {
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //     method: 'POST',
-  //     body: imageFormObj
-  //   }).then(res => console.log(res));
-  // }
-
   render () {
     if (this.state.role === 'Vet') {
       return (
@@ -79,10 +63,6 @@ class Signup extends Component {
   else {
     return (
       <div>
-        <form action="/uploadImg" method="post" encType="multipart/form-data">
-          <input type="file" name="avatar" />
-          <input type="submit"  name="LOAD" />
-        </form>
         Signup Form:<br />
         <form id = "signupForm" onSubmit = { (event) => this.props.newUser(event)}>
           <label><input type="radio" onChange={(e) => this.handleClick(e)} required name="role" value="Owner" />Owner</label>

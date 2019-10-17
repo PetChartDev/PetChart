@@ -231,7 +231,128 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         userProfile,
-      }; }
+      };
+    }
+
+    case types.UPDATE_PET: {
+      console.log('updated pet:', action.payload);
+      const responsePet = action.payload;
+
+      const { userProfile } = state;
+
+      let newProfile = Object.assign({}, userProfile);
+      
+      newProfile.pets = newProfile.pets.map((pet, idx) => {
+        if (idx === responsePet.id) {
+          let nameUpdate, typeUpdate, birthUpdate, genderUpdate, spayedUpdate;
+          responsePet.name !== "" ? nameUpdate = responsePet.name : nameUpdate = pet.name;
+          responsePet.type !== "" ? typeUpdate = responsePet.type : typeUpdate = pet.type;
+          responsePet.birthYear !== "" ? birthUpdate = responsePet.birthYear : birthUpdate = pet.birthYear;
+          responsePet.gender !== "" ? genderUpdate = responsePet.gender : genderUpdate = pet.gender;
+          responsePet.spayed !== "" ? spayedUpdate = responsePet.spayed : spayedUpdate = pet.spayed;
+          return {
+            ...pet,
+            name: nameUpdate,
+            type: typeUpdate,
+            birthYear: birthUpdate,
+            gender: genderUpdate,
+            spayed: spayedUpdate,
+          }
+        }
+        return pet;
+      })
+
+      return {
+        ...state,
+        userProfile: newProfile,
+      }
+    }
+
+    case types.UPDATE_ACTIVE_PET: {
+      console.log('updated pet:', action.payload);
+      const responsePet = action.payload;
+
+      const { activePet } = state;
+
+      let newActivePet = Object.assign({}, activePet);
+
+      let nameUpdate, typeUpdate, birthUpdate, genderUpdate, spayedUpdate;
+      responsePet.name !== "" ? nameUpdate = responsePet.name : nameUpdate = activePet.name;
+      responsePet.type !== "" ? typeUpdate = responsePet.type : typeUpdate = activePet.type;
+      responsePet.birthYear !== "" ? birthUpdate = responsePet.birthYear : birthUpdate = activePet.birthYear;
+      responsePet.gender !== "" ? genderUpdate = responsePet.gender : genderUpdate = activePet.gender;
+      responsePet.spayed !== "" ? spayedUpdate = responsePet.spayed : spayedUpdate = activePet.spayed;
+      
+      newActivePet.name = nameUpdate;
+      newActivePet.type = typeUpdate;
+      newActivePet.birthYear = birthUpdate;
+      newActivePet.gender = genderUpdate;
+      newActivePet.spayed = spayedUpdate;
+
+  
+      // newActivePet.visits = responsePet.visits 
+      // newActivePet.vaccines = responsePet.vaccines
+      // newActivePet.surgeries = responsePet.surgeries
+      
+      return {
+        ...state,
+        activePet: newActivePet,
+      }
+    }
+      
+    case types.ADD_VISIT: {
+      const responseVisit = action.payload;
+
+      const newUserProfile = Object.assign({}, state.userProfile);
+
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseVisit.pet_id) {
+          console.log("matched the pet id");
+          newUserProfile.pets[i].visits.push(responseVisit);
+        }
+      }
+
+      return {
+        ...state,
+        userProfile: newUserProfile,
+      };
+    }
+
+    case types.ADD_VACCINE: {
+      const responseVaccine = action.payload;
+
+      const newUserProfile = Object.assign({}, state.userProfile);
+
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseVaccine.pet_id) {
+          console.log("matched the pet id");
+          newUserProfile.pets[i].vaccines.push(responseVaccine);
+        }
+      }
+
+      return {
+        ...state,
+        userProfile: newUserProfile,
+      };
+    }
+
+    case types.ADD_SURGERY: {
+      const responseSurgery = action.payload;
+
+      const newUserProfile = Object.assign({}, state.userProfile);
+
+      for (let i = 0; i < newUserProfile.pets.length; i += 1){
+        if (newUserProfile.pets[i].id === responseSurgery.pet_id) {
+          console.log("matched the pet id");
+          newUserProfile.pets[i].surgeries.push(responseSurgery);
+        }
+      }
+
+      return {
+        ...state,
+        userProfile: newUserProfile,
+      };
+    }
 
     case types.SAVE_PROFILE:
 

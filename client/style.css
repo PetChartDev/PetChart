@@ -44,10 +44,74 @@ body {
   background-color: #61f2f5;
 }
 
-.nav-bar {
-  background-color: #e0e0e0;
+.nav-container{
+  display: flex;
 }
 
-.home-container {
-  color: white;
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  margin-right: 20px;
+  margin-left: 20px;
+  background-color: #e0e0e0;
+  width: 10%;
+}
+
+.home-wrapper {
+  display: flex;
+  align-content: space-around;
+  background-color: darkgray;
+}
+
+.home-wrapper {
+  background-color: lightgrey;
+}
+
+.img-name{
+  display: flex;
+}
+
+.img-name img{
+  margin-bottom: 20px;
+  margin-left: 20px;
+  border-radius: 50%;
+  width: 100px;
+}
+
+.img-name h1{
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.profile-body{
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.profile-body form{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+input[type="submit"], input[type="button"] {
+  background-color: #61f2f5;
+  color: #504e4e;
+  border: none;
+  padding: 10px 13px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.navBarButton {
+  background-color: #61f2f5;
+  color: #504e4e;
+  border: none;
+  padding: 10px 13px;
+  margin-top: 3px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 3px;
 }

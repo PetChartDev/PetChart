@@ -1,3 +1,6 @@
 {
   "presets": ["@babel/preset-env"]
 }
+// Jest looks for .babelrc file
+// so we have define preset here and remove from webpack config
+// this won't affect webpack as webpack looks for this file

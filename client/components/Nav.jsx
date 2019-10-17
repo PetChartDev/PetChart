@@ -29,8 +29,8 @@ const Nav = (props) => {
     Hello,
       {' '}
       {props.owner}
-      <button type="button" onClick={() => props.changeDBPage('home')}>Home</button>
-      <button type="button" onClick = { () => props.logout("login")}>Logout</button>
+      <button type="button" className="navBarButton" onClick={() => props.changeDBPage('home')}>Home</button>
+      <button type="button" className="navBarButton" onClick = { () => props.logout("login")}>Logout</button>
       {petButtons}
     </div>
   );

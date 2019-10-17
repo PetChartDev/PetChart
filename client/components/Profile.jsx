@@ -17,6 +17,10 @@ import Visit from './Visit.jsx';
 import Vaccine from './Vaccine.jsx';
 import Surgery from './Surgery.jsx';
 
+// Ant Design
+// import { DatePicker } from 'antd';
+// import 'antd/dist/antd.css';
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +28,6 @@ class Profile extends Component {
     this.addVisit = this.addVisit.bind(this);
     this.addVaccine = this.addVaccine.bind(this);
     this.addSurgery = this.addSurgery.bind(this);
-    this.savePet = this.props.savePet.bind(this);
   }
 
   // grab updated/newly added pet details
@@ -39,7 +42,10 @@ class Profile extends Component {
     const gender = form.gender.value;
     const spayed = form.spayed.value;
     const { ownerID } = this.props;
-    const petProfile = {
+    const petID = this.props.activePet.id;
+    // @todo: include vetID in the props and pass it along
+    let method = 'POST'; 
+    let petProfile = {
       name,
       type,
       birthYear,
@@ -47,9 +53,13 @@ class Profile extends Component {
       spayed,
       ownerID,
     };
+    if (petID) {
+      petProfile = Object.assign(petProfile, { petID: petID });
+      method = 'PATCH'
+    }
 
     fetch('/pets/', {
-      method: 'POST',
+      method,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -58,7 +68,8 @@ class Profile extends Component {
       .then((response) => response.json())
       .then((petObject) => {
         console.log(petObject);
-        this.savePet(petObject);
+        this.props.updatePet(petObject);
+        this.props.updateActivePet(petObject)
       })
       .catch((err) => console.log(err));
   }
@@ -71,16 +82,25 @@ class Profile extends Component {
     const form = document.querySelector('.visit-form');
     const date = form.date.value;
     const notes = form.notes.value;
-    const vet = form.vet.value;
-    const file = form.file.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const visitDetails = {
+      petID: this.props.activePet.id,
       date,
       notes,
-      vet,
-      file,
     };
-    return this.props.savePet(petProfile);
+    
+    fetch('/visits/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ visit: visitDetails }),
+    })
+      .then((response) => response.json())
+      .then((visitDetailsObj) => {
+        console.log(visitDetailsObj);
+        this.props.addVisitToState(visitDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   // grab vaccine details from form
@@ -91,12 +111,25 @@ class Profile extends Component {
     const form = document.querySelector('.vaccine-form');
     const date = form.date.value;
     const name = form.name.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const vaccineDetail = {
+      pet_id: this.props.activePet.id,
       date,
       name,
     };
-    return this.props.savePet(petProfile);
+
+    fetch('/vaccines/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vaccine: vaccineDetail }),
+    })
+      .then((response) => response.json())
+      .then((vaccineDetailsObj) => {
+        console.log("VACCINE RETURN FROM CONTROLLER", vaccineDetailsObj);
+        this.props.addVaccineToState(vaccineDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   // grab surgery details from form
@@ -107,12 +140,25 @@ class Profile extends Component {
     const form = document.querySelector('.surgery-form');
     const date = form.date.value;
     const name = form.name.value;
-    const petProfile = {
-      id: this.props.activePet.id,
+    const surgeryDetail = {
+      petID: this.props.activePet.id,
       date,
       name,
     };
-    return this.props.savePet(petProfile);
+    
+    fetch('/surgeries/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ surgery: surgeryDetail }),
+    })
+      .then((response) => response.json())
+      .then((surgeryDetailsObj) => {
+        console.log(surgeryDetailsObj);
+        this.props.addSurgeryToState(surgeryDetailsObj);
+      })
+      .catch((err) => console.log(err));
   }
 
   render() {
@@ -124,6 +170,12 @@ class Profile extends Component {
     const vaccinesListItems = [];
     const surgeriesListItems = [];
 
+    let buttonText = 'Save Pet';
+    let formHeaderText = 'Add New Pet';
+    if (activePet.id) {
+      buttonText = 'Update Pet';
+      formHeaderText = 'Update Pet Information';
+    }
     // if activePet exists, generate arrays of Visit, Vaccine, and Surgery components
     if (activePet.id) {
       for (let i = 0; i < 5; i += 1) {
@@ -143,12 +195,12 @@ class Profile extends Component {
       <div className="profile-container">
         <section className="profile-header">
           <div className="img-name">
-            <img src={`"${activePet.profilePic}"`} alt="pet profile pic" />
+            <img src={`/uploads/pet${activePet.id}.png`} alt="pet profile pic" />
             <h1>{activePet.name}</h1>
           </div>
           <div className="pet-profile-details-container">
             <form className="pet-profile-details-form">
-              Add/update pet details:
+             {formHeaderText} :
               {' '}
               <br />
               <label>
@@ -171,7 +223,12 @@ class Profile extends Component {
                 Spayed/Neutered?
                 <input type="text" name="spayed" id="pet-spayed-input" />
               </label>
-              <input type="submit" value="Save Pet Details" onClick={this.updatePetDetails} />
+              <input type="submit" value={buttonText} onClick={this.updatePetDetails} />
+            </form>
+            <form action={`/uploadImg/${this.props.activePet.id}`} method="post" encType="multipart/form-data">
+              <input type="file" name="avatar" />
+              <input type="hidden" id="petID" name="petID" value={this.props.activePet.id} />
+              <input type="submit"  name="LOAD" />
             </form>
             <ul className="pet-profile-details">
               <li>
@@ -192,6 +249,7 @@ class Profile extends Component {
             </ul>
           </div>
         </section>
+        { this.props.activePet.id ? 
         <section className="profile-body">
           <div className="visits-container">
             <h3>Visits</h3>
@@ -207,65 +265,55 @@ class Profile extends Component {
                 Notes:
                 <input type="text" name="notes" id="visit-notes-input" />
               </label>
-              <label>
-                Vet:
-                <input type="text" name="vet" id="visit-vet-input" />
-              </label>
-              <label>
-                Upload a file:
-                <input type="text" name="file" id="visit-file-input" />
-              </label>
               <input type="submit" value="Save Visit" onClick={this.addVisit} />
             </form>
             <ul className="visits">
               {visitsListItems}
             </ul>
-            <div className="vaccines-surgeries">
-              <div className="vaccines-container">
-                <h3>Vaccines</h3>
-                <form className="vaccine-form">
-                  Add a vaccine
-                  {' '}
-                  <br />
-                  <label>
-                    Date:
-                    <input type="text" name="date" id="vaccine-date-input" />
-                  </label>
-                  <label>
-                    Name:
-                    <input type="text" name="name" id="vaccine-name-input" />
-                  </label>
-                  <input type="submit" value="Save Vaccine" onClick={this.addVaccine} />
-                </form>
-                <ul className="vaccines-list">
-                  {vaccinesListItems}
-                </ul>
-              </div>
-              <div className="surgeries-container">
-                <h3>Surgeries</h3>
-                <form className="surgery-form">
-                  Add a surgery
-                  {' '}
-                  <br />
-                  <label>
-                    Date:
-                    <input type="text" name="date" id="surgery-date-input" />
-                  </label>
-                  <label>
-                    Name:
-                    <input type="text" name="name" id="surgery-name-input" />
-                  </label>
-                  <input type="submit" value="Save Surgery" onClick={this.addSurgery} />
-                </form>
-                <ul className="surgeries-list">
-                  {surgeriesListItems}
-                </ul>
-              </div>
             </div>
+          <div className="vaccines-container">
+            <h3>Vaccines</h3>
+            <form className="vaccine-form">
+              Add a vaccine
+              {' '}
+              <br />
+              <label>
+                Date:
+                <input type="text" name="date" id="vaccine-date-input" />
+              </label>
+              <label>
+                Name:
+                <input type="text" name="name" id="vaccine-name-input" />
+              </label>
+              <input type="submit" value="Save Vaccine" onClick={this.addVaccine} />
+            </form>
+            <ul className="vaccines-list">
+              {vaccinesListItems}
+            </ul>
+          </div>
+          <div className="surgeries-container">
+            <h3>Surgeries</h3>
+            <form className="surgery-form">
+              Add a surgery
+              {' '}
+              <br />
+              <label>
+                Date:
+                <input type="text" name="date" id="surgery-date-input" />
+              </label>
+              <label>
+                Name:
+                <input type="text" name="name" id="surgery-name-input" />
+              </label>
+              <input type="submit" value="Save Surgery" onClick={this.addSurgery} />
+            </form>
+            <ul className="surgeries-list">
+              {surgeriesListItems}
+            </ul>
           </div>
         </section>
+        : <div></div> }
         <button type="button" onClick={() => this.props.changeDBPage('home')}>Home</button>
-        {/* <button type="button" onClick={() => this.props.savePet(this.props.pet)}>Save Pet</button> */}
       </div>
     );
   }

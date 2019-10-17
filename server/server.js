@@ -12,12 +12,13 @@ const vaccinesRouter = require('./routes/vaccinesRouter');
 const sessionsController = require('./controllers/sessionsController');
 
 const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, './uploads');
-  },
-  filename(req, file, cb) {
-    cb(null, file.originalname);
-  },
+  destination (req, file, cb) {
+  cb(null, './uploads');
+},
+  filename (req, file, cb) {
+  console.log("this is inside upload", req.params)
+  cb(null, "pet" + req.params.petId + '.png');
+},
 });
 
 
@@ -62,10 +63,12 @@ app.use('/surgeries', surgeryRouter);
 
 app.use('/build', express.static(path.resolve(__dirname, '../build')));
 
-app.post('/uploadImg', upload.single('avatar'), (req, res, next) => {
-  console.log('HEEEELLLLOOOOOO', req.file);
-  // res.status(200).send(req.file);
+
+app.post('/uploadImg/:petId', upload.single('avatar'), (req, res, next) => {
+  res.redirect('/');
 });
+
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 app.get('/', sessionsController.findSession, (req, res, next) => res.sendFile(path.resolve(__dirname, '../client/index.html'), {
   headers: {
