@@ -47,6 +47,10 @@ surgeryController.createSurgery = (req, res, next) => {
 */
 surgeryController.getSurgeries = (req, res, next) => {
   console.log('\n*********** surgeryController.getSurgeries ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+
+  const { role, ssid } = res.locals;
+  if (role === 'Vet' || ssid[0] === 'v') return next();
+
   const { passwordMatch, profileMatch, session } = res.locals;
 
   if ((profileMatch && passwordMatch) || session) {

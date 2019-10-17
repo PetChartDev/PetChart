@@ -29,7 +29,7 @@ const mapStateToProps = (state) => ({
 class VetDashboard extends Component {
   constructor(props) {
     super(props);
-    this.state ={
+    this.state = {
       pets: [],
       customers: [],
     };
@@ -37,31 +37,36 @@ class VetDashboard extends Component {
     this.getAllCustomers = this.getAllCustomers.bind(this);
   }
 
-  getAllPets () {
-    fetch('/getAllPets').then(pets => this.setState({ pets }))
+  getAllPets() {
+    fetch('/getAllPets').then((pets) => this.setState({ pets }));
   }
 
-  getAllCustomers () {
-    fetch('/getAllPets').then(customers => this.setState({ customers }))
+  getAllCustomers() {
+    fetch('/getAllPets').then((customers) => this.setState({ customers }));
   }
 
-  render () {
-    let petsArray = [], customersArray = [];
+  render() {
+    let petsArray = []; const
+      customersArray = [];
     for (let i = 0; i < this.state.pets.length; i += 1) {
-      petsArray.push(<div>{this.state.pets[i].name}</div>)
+      petsArray.push(<div>{this.state.pets[i].name}</div>);
     }
     for (let i = 0; i < this.state.customers.length; i += 1) {
-      customersArray.push(<div>{this.state.customers[i].name}</div>)
+      customersArray.push(<div>{this.state.customers[i].name}</div>);
     }
-    if (petsArray.length === 0) petsArray = "You suck at being a vet. You have no pets."
-    if (customersArray.length === 0) petsArray = "You suck at being a vet. All your customers left you."
+    if (petsArray.length === 0) petsArray = 'You suck at being a vet. You have no pets.';
+    if (customersArray.length === 0) petsArray = 'You suck at being a vet. All your customers left you.';
 
-    console.log(this.props.userProfile)
+    console.log(this.props.userProfile);
     return (
       <div>
-        <div>I'M AN UNLICENSED VET! WELCOME {this.props.userProfile.owner.firstName}</div>
-        <input type="button" onClick={this.getAllPets} value="Get all pets"></input>
-        <input type="button" onClick={this.getAllCustomers} value="Get all customers"></input>
+        <div>
+I'M AN UNLICENSED VET! WELCOME
+          {' '}
+          {this.props.userProfile.vet.firstName}
+        </div>
+        <input type="button" onClick={this.getAllPets} value="Get all pets" />
+        <input type="button" onClick={this.getAllCustomers} value="Get all customers" />
         <div>{customersArray}</div>
         <div>{petsArray}</div>
       </div>

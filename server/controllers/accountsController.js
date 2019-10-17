@@ -107,14 +107,25 @@ accountsController.login = (req, res, next) => {
           if (!passwordMatch) {
             return next();
           }
+
+          if (role === 'Owner') {
           // if bcrypt.compare returns true
           // save all of the query profile data into res.locals obj
-          res.locals.owner = {
-            id: profile.rows[0].owner_id,
-            firstName: profile.rows[0].first_name,
-            lastName: profile.rows[0].last_name,
-            email: profile.rows[0].email,
-          };
+            res.locals.owner = {
+              id: profile.rows[0].owner_id,
+              firstName: profile.rows[0].first_name,
+              lastName: profile.rows[0].last_name,
+              email: profile.rows[0].email,
+            };
+          } else {
+            res.locals.vet = {
+              id: profile.rows[0].vet_id,
+              firstName: profile.rows[0].first_name,
+              lastName: profile.rows[0].last_name,
+              email: profile.rows[0].email,
+              practiceName: profile.rows[0].practice_name,
+            };
+          }
           res.locals.role = role;
           return next();
         });
@@ -130,11 +141,17 @@ accountsController.login = (req, res, next) => {
 accountsController.logout = (req, res, next) => {
   res.clearCookie('ssid');
   return next();
-}
+};
 
 accountsController.getOwner = (req, res, next) => {
+  console.log('\n*********** accountsController.getOwner ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+
+  const role = res.locals.ssid[0] === 'v' ? 'vet' : 'owner';
+
+  const ID = res.locals.ssid.substring(1);
+
   db.connect((err, client, release) => {
-    client.query(`SELECT * FROM owners WHERE owner_id=${res.locals.ssid}`, (profileQueryErr, profile) => {
+    client.query(`SELECT * FROM ${role}s WHERE ${role}_id=${ID}`, (profileQueryErr, profile) => {
       release();
       if (profileQueryErr) {
         console.log('error from password retrievel query: ', profileQueryErr);
@@ -145,13 +162,23 @@ accountsController.getOwner = (req, res, next) => {
       // if profile doesn't exist, the array will be empty
       // query response comes in profile.rows array -> values of array are objs
       if (profile.rows[0]) {
-      // save all of the query profile data into res.locals obj
-        res.locals.owner = {
-          id: profile.rows[0].owner_id,
-          firstName: profile.rows[0].first_name,
-          lastName: profile.rows[0].last_name,
-          email: profile.rows[0].email,
-        };
+        if (role === 'owner') {
+          // save all of the query profile data into res.locals obj
+          res.locals.owner = {
+            id: profile.rows[0].owner_id,
+            firstName: profile.rows[0].first_name,
+            lastName: profile.rows[0].last_name,
+            email: profile.rows[0].email,
+          };
+        } else {
+          res.locals.vet = {
+            id: profile.rows[0].vet_id,
+            firstName: profile.rows[0].first_name,
+            lastName: profile.rows[0].last_name,
+            email: profile.rows[0].email,
+            practiceName: profile.rows[0].practice_name,
+          };
+        }
         // res.locals.role = role;
         return next();
       }

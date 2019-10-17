@@ -16,7 +16,7 @@ vaccinesController.createVaccines = (req, res, next) => {
   const vaccineQuery = {
     name: 'create vaccine',
     text: 'INSERT INTO vaccines (name, date, pet_id) VALUES ($1, $2, $3) RETURNING *',
-    values: [name, date, pet_id]
+    values: [name, date, pet_id],
   };
 
   db.connect((err, client, release) => {
@@ -27,14 +27,14 @@ vaccinesController.createVaccines = (req, res, next) => {
     }
     client.query(vaccineQuery)
       .then((newVaccine) => {
-        console.log("VAX CONTROLLER LOG", newVaccine)
+        console.log('VAX CONTROLLER LOG', newVaccine);
         release();
         // successful query
         res.locals.newVaccine = newVaccine.rows[0];
         return next();
       })
       .catch((vaccineQueryErr) => next(vaccineQueryErr));
-    
+
     // (error, success) => {
     //   // catch error
     //   if (error) {
@@ -62,6 +62,10 @@ vaccinesController.createVaccines = (req, res, next) => {
 */
 vaccinesController.getVaccines = (req, res, next) => {
   console.log('\n*********** vaccineController.getVaccines ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+
+  const { role, ssid } = res.locals;
+  if (role === 'Vet' || ssid[0] === 'v') return next();
+
   const { passwordMatch, profileMatch, session } = res.locals;
 
   if ((profileMatch && passwordMatch) || session) {
@@ -70,7 +74,7 @@ vaccinesController.getVaccines = (req, res, next) => {
       // queries for visits for each pet, returning unresolved promises
       // combinedPromises = [<Promise>, <Promise>, ...]
       db.connect((err, client, release) => {
-        if (err) return next({ message: "Vaccines Controller line 78" + err });
+        if (err) return next({ message: `Vaccines Controller line 78${  err}` });
         const combinedPromises = pets.map((pet) => client.query(`SELECT * FROM vaccines WHERE pet_id=${pet.id}`));
         // release client after every query
         release();

@@ -31,16 +31,24 @@ class Login extends Component {
         const { session } = responseObj;
         const parsedResp = responseObj.body;
         console.log('just got parsed: ', parsedResp);
-        const userProfile = {
-          owner: parsedResp.owner,
-          pets: parsedResp.pets,
-          role: 'Owner',
-        };
+        const userProfile = {};
+        let appPage = '';
+        if (parsedResp.owner) {
+          userProfile.owner = parsedResp.owner;
+          userProfile.pets = parsedResp.pets;
+          userProfile.role = 'Owner';
+          appPage = 'dashboard';
+        } else {
+          console.log('inside vet conditional of comp will mount: ', parsedResp);
+          userProfile.vet = parsedResp.vet;
+          userProfile.role = 'Vet';
+          appPage = 'vetDashboard';
+        }
         console.log('line 26 session: ', session);
         if (session === 'true') {
           console.log('ciao', this.props);
           this.props.createUserProfile(userProfile);
-          this.props.publicPage('dashboard');
+          this.props.publicPage(appPage);
         }
       })
       .catch((err) => console.log('fuck you: ', err));

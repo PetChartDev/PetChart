@@ -69,12 +69,14 @@ class MainContainer extends Component {
         console.log('userProfile', userProfile);
         const newUserProfile = userProfile;
         console.log('newUserProfile');
-        const newPetsArray = newUserProfile.pets.map((el) => ({
-          ...emptyPet,
-          ...el,
-        }));
-        console.log('newPetsArray', newPetsArray);
-        newUserProfile.pets = newPetsArray;
+        if (userProfile.role === 'Owner') {
+          const newPetsArray = newUserProfile.pets.map((el) => ({
+            ...emptyPet,
+            ...el,
+          }));
+          console.log('newPetsArray', newPetsArray);
+          newUserProfile.pets = newPetsArray;
+        }
         this.props.createUserProfile(newUserProfile);
         userProfile.role === 'Owner' ? this.props.publicPage('dashboard') : this.props.publicPage('vetDashboard');
       })
