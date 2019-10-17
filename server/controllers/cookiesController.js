@@ -13,7 +13,7 @@ cookiesController.setSSIDCookie = (req, res, next) => {
 
   if (!res.locals.owner.id) return next({ message: 'from cookieController.setSSIDCookie: no owner id on res.locals' });
   console.log('owner id: ', res.locals.owner.id);
-  const ssid = hash(res.locals.owner.id);
+  const ssid = res.locals.owner.id;
   console.log('ssid: ', ssid);
   res.cookie('ssid', JSON.stringify(ssid), { encode: String, httpOnly: true });
   res.locals.ssid = ssid;

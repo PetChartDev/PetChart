@@ -103,7 +103,7 @@ class MainContainer extends Component {
       const email = form[5].value;
       const password = form[6].value;
       createUser = {
-        firstName, lastName, practice, email, password, role
+        firstName, lastName, practice, email, password, role,
       };
     } else {
       const role = roleSwitch;
@@ -112,7 +112,7 @@ class MainContainer extends Component {
       const email = form[4].value;
       const password = form[5].value;
       createUser = {
-        firstName, lastName, email, password, role
+        firstName, lastName, email, password, role,
       };
     }
 
@@ -139,7 +139,7 @@ class MainContainer extends Component {
     switch (this.props.appPage) {
       case 'login':
         return (
-          <Login publicPage={this.props.publicPage} saveProfile={this.verifyUser} />
+          <Login publicPage={this.props.publicPage} saveProfile={this.verifyUser} createUserProfile={this.props.createUserProfile} />
         );
       case 'dashboard':
         return (

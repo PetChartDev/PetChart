@@ -7,13 +7,17 @@ const db = require('../../database/database');
  * @requirements : a owner_id(id) stored inside res.locals
  */
 petsController.getPets = (req, res, next) => {
-  console.log('\n*********** petsController.getPets ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nLOCALS: ${JSON.stringify(res.locals)} `);
+  console.log('\n*********** petsController.getPets ****************', `\nMETHOD: ${req.method} \nENDPOINT: '${req.url}' \nBODY: ${JSON.stringify(req.body)} \nHEADERS: ${JSON.stringify(res.headers)} \nLOCALS: ${JSON.stringify(res.locals)} `);
 
-  const { passwordMatch, profileMatch } = res.locals;
+  const { passwordMatch, profileMatch, session } = res.locals;
 
-  if (profileMatch && passwordMatch) {
+  if ((profileMatch && passwordMatch) || session) {
     // NOTES: id will be retrieved from a user logging in
-    const { id } = res.locals.owner;
+    console.log('res.locals: ', res.locals);
+    let id = '';
+    if (!res.locals.owner) id = res.locals.ssid;
+    else id = res.locals.owner.id;
+    console.log(id);
     db.connect((err, client, release) => {
       client.query(petQuery.getPetsFromOwner, [id])
         .then((petList) => {
@@ -157,7 +161,6 @@ petsController.deletePet = (req, res, next) => {
       });
   });
 };
-
 
 
 module.exports = petsController;
